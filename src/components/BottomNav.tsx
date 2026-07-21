@@ -4,8 +4,9 @@ import './BottomNav.css';
 const tabs: { id: AppView; label: string }[] = [
   { id: 'command', label: 'Command' },
   { id: 'goals', label: 'Goals' },
+  { id: 'atlas', label: 'Atlas' },
   { id: 'brain', label: 'Brain' },
-  { id: 'evolution', label: 'Evolution' },
+  { id: 'evolution', label: 'Evolve' },
   { id: 'identity', label: 'Identity' },
 ];
 

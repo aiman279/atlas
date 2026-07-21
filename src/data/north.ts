@@ -11,6 +11,9 @@ export function loadNorth(): NorthData {
     if (!parsed?.profile?.name || !Array.isArray(parsed.goals)) {
       return structuredClone(seedNorth);
     }
+    if (!Array.isArray(parsed.atlas) || parsed.atlas.length === 0) {
+      parsed.atlas = structuredClone(seedNorth.atlas);
+    }
     return parsed;
   } catch {
     return structuredClone(seedNorth);

@@ -1,0 +1,40 @@
+.world-map {
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 0.65rem 0.35rem 0.35rem;
+}
+
+.world-map svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-country {
+  stroke: var(--bg);
+  stroke-width: 0.4;
+  transition: fill 0.2s ease, opacity 0.2s ease;
+  cursor: default;
+}
+
+.map-country.is-neutral {
+  fill: rgba(156, 163, 175, 0.22);
+}
+
+[data-theme='light'] .map-country.is-neutral {
+  fill: rgba(107, 114, 128, 0.18);
+}
+
+.map-country.is-visited {
+  fill: var(--accent);
+  opacity: 0.88;
+  cursor: pointer;
+}
+
+.map-country.is-visited.is-active {
+  opacity: 1;
+  filter: brightness(1.15);
+}

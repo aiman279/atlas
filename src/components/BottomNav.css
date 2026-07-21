@@ -8,7 +8,7 @@
   height: calc(var(--nav-h) + var(--safe-b));
   padding: 0 4px var(--safe-b);
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   align-items: center;
   background: rgba(11, 13, 16, 0.82);
   backdrop-filter: blur(16px);
@@ -24,7 +24,7 @@
 .nav-tab {
   padding: 10px 2px;
   color: var(--ink-3);
-  font-size: 0.62rem;
+  font-size: 0.55rem;
   font-weight: 500;
   letter-spacing: 0.01em;
   transition: color 0.15s ease;

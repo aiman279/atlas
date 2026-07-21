@@ -6,6 +6,7 @@ import { Fab } from './components/Fab';
 import type { AppView, FabAction } from './data/types';
 import { NorthProvider } from './hooks/useNorth';
 import { BrainView } from './views/BrainView';
+import { AtlasView } from './views/AtlasView';
 import { CommandView } from './views/CommandView';
 import { EvolutionView } from './views/EvolutionView';
 import { GoalDetailView } from './views/GoalDetailView';
@@ -59,6 +60,7 @@ function NorthApp() {
               />
             )}
             {view === 'brain' && <BrainView />}
+            {view === 'atlas' && <AtlasView />}
             {view === 'evolution' && <EvolutionView />}
             {view === 'identity' && <IdentityView />}
           </motion.div>

@@ -82,6 +82,19 @@ export interface ThemePrefs {
   mode: 'dark' | 'light';
 }
 
+export interface VisitedCountry {
+  id: string;
+  name: string;
+  flag: string;
+  /** ISO 3166-1 numeric — matches world-atlas feature ids */
+  isoNumeric: string;
+  continent: string;
+  visitedAt: string;
+  trips: number;
+  days: number;
+  cities: string[];
+}
+
 export interface NorthData {
   profile: IdentityProfile;
   lifeAreas: LifeArea[];
@@ -90,12 +103,14 @@ export interface NorthData {
   brain: BrainItem[];
   evolution: EvolutionYear[];
   theme: ThemePrefs;
+  atlas: VisitedCountry[];
 }
 
 export type AppView =
   | 'command'
   | 'goals'
   | 'goal-detail'
+  | 'atlas'
   | 'brain'
   | 'evolution'
   | 'identity';
