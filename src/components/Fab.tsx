@@ -4,14 +4,11 @@ import './Fab.css';
 
 const actions: { id: Exclude<FabAction, null>; label: string; hint: string }[] =
   [
-    { id: 'chapter', label: 'Create Chapter', hint: 'A new period of your life' },
-    { id: 'memory', label: 'Add Memory', hint: 'A moment worth keeping' },
-    { id: 'goal', label: 'Add Goal', hint: 'Something you are becoming' },
-    {
-      id: 'achievement',
-      label: 'Add Achievement',
-      hint: 'A milestone you earned',
-    },
+    { id: 'goal', label: 'New goal mission', hint: 'Turn a dream into a path' },
+    { id: 'brain', label: 'Capture to Brain', hint: 'Idea, lesson, decision' },
+    { id: 'reflect', label: 'Weekly reflection', hint: 'AI summary & patterns' },
+    { id: 'report', label: 'Monthly report', hint: 'Life progress snapshot' },
+    { id: 'project', label: 'Future projection', hint: 'Where compounding leads' },
   ];
 
 export function Fab({
@@ -29,9 +26,9 @@ export function Fab({
         {open && (
           <motion.div
             className="fab-menu"
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
+            exit={{ opacity: 0, y: 6 }}
           >
             {actions.map((a) => (
               <button
@@ -51,7 +48,7 @@ export function Fab({
         type="button"
         className={`fab-btn${open ? ' is-open' : ''}`}
         onClick={onToggle}
-        aria-label={open ? 'Close' : 'Add to your story'}
+        aria-label={open ? 'Close' : 'Open actions'}
         aria-expanded={open}
       >
         <span aria-hidden>{open ? '×' : '+'}</span>

@@ -2,10 +2,11 @@ import type { AppView } from '../data/types';
 import './BottomNav.css';
 
 const tabs: { id: AppView; label: string }[] = [
-  { id: 'home', label: 'Home' },
-  { id: 'chapters', label: 'Chapters' },
-  { id: 'memories', label: 'Memories' },
-  { id: 'me', label: 'Me' },
+  { id: 'command', label: 'Command' },
+  { id: 'goals', label: 'Goals' },
+  { id: 'brain', label: 'Brain' },
+  { id: 'evolution', label: 'Evolution' },
+  { id: 'identity', label: 'Identity' },
 ];
 
 export function BottomNav({
@@ -15,12 +16,7 @@ export function BottomNav({
   current: AppView;
   onNavigate: (view: AppView) => void;
 }) {
-  const active =
-    current === 'chapter-detail'
-      ? 'chapters'
-      : current === 'memory-detail'
-        ? 'memories'
-        : current;
+  const active = current === 'goal-detail' ? 'goals' : current;
 
   return (
     <nav className="bottom-nav" aria-label="Main">

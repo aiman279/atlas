@@ -4,47 +4,41 @@ import { ActionSheets } from './components/ActionSheets';
 import { BottomNav } from './components/BottomNav';
 import { Fab } from './components/Fab';
 import type { AppView, FabAction } from './data/types';
-import { AtlasProvider } from './hooks/useAtlas';
-import { ChapterDetailView } from './views/ChapterDetailView';
-import { ChaptersView } from './views/ChaptersView';
-import { HomeView } from './views/HomeView';
-import { MeView } from './views/MeView';
-import { MemoriesView } from './views/MemoriesView';
-import { MemoryDetailView } from './views/MemoryDetailView';
+import { NorthProvider } from './hooks/useNorth';
+import { BrainView } from './views/BrainView';
+import { CommandView } from './views/CommandView';
+import { EvolutionView } from './views/EvolutionView';
+import { GoalDetailView } from './views/GoalDetailView';
+import { GoalsView } from './views/GoalsView';
+import { IdentityView } from './views/IdentityView';
 import './styles/global.css';
 import './views/views.css';
 
 export default function App() {
   return (
-    <AtlasProvider>
-      <AtlasApp />
-    </AtlasProvider>
+    <NorthProvider>
+      <NorthApp />
+    </NorthProvider>
   );
 }
 
-function AtlasApp() {
-  const [view, setView] = useState<AppView>('home');
-  const [chapterId, setChapterId] = useState<string | null>(null);
-  const [memoryId, setMemoryId] = useState<string | null>(null);
+function NorthApp() {
+  const [view, setView] = useState<AppView>('command');
+  const [goalId, setGoalId] = useState<string | null>(null);
   const [fabOpen, setFabOpen] = useState(false);
   const [action, setAction] = useState<FabAction>(null);
 
   function navigate(next: AppView, id?: string) {
-    if (next === 'chapter-detail' && id) setChapterId(id);
-    if (next === 'memory-detail' && id) setMemoryId(id);
+    if (next === 'goal-detail' && id) setGoalId(id);
     setView(next);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  const key =
-    view === 'chapter-detail'
-      ? `ch-${chapterId}`
-      : view === 'memory-detail'
-        ? `mem-${memoryId}`
-        : view;
+  const key = view === 'goal-detail' ? `g-${goalId}` : view;
 
   return (
     <div className="app-shell">
+      <div className="ambient" aria-hidden />
       <main className="app-main">
         <AnimatePresence mode="wait">
           <motion.div
@@ -52,32 +46,21 @@ function AtlasApp() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.28 }}
+            transition={{ duration: 0.25 }}
           >
-            {view === 'home' && <HomeView onNavigate={navigate} />}
-            {view === 'chapters' && (
-              <ChaptersView
-                onOpen={(id) => navigate('chapter-detail', id)}
+            {view === 'command' && <CommandView />}
+            {view === 'goals' && (
+              <GoalsView onOpen={(id) => navigate('goal-detail', id)} />
+            )}
+            {view === 'goal-detail' && goalId && (
+              <GoalDetailView
+                goalId={goalId}
+                onBack={() => navigate('goals')}
               />
             )}
-            {view === 'chapter-detail' && chapterId && (
-              <ChapterDetailView
-                chapterId={chapterId}
-                onBack={() => navigate('chapters')}
-              />
-            )}
-            {view === 'memories' && (
-              <MemoriesView
-                onOpen={(id) => navigate('memory-detail', id)}
-              />
-            )}
-            {view === 'memory-detail' && memoryId && (
-              <MemoryDetailView
-                memoryId={memoryId}
-                onBack={() => navigate('memories')}
-              />
-            )}
-            {view === 'me' && <MeView />}
+            {view === 'brain' && <BrainView />}
+            {view === 'evolution' && <EvolutionView />}
+            {view === 'identity' && <IdentityView />}
           </motion.div>
         </AnimatePresence>
       </main>
@@ -94,8 +77,7 @@ function AtlasApp() {
       <ActionSheets
         action={action}
         onClose={() => setAction(null)}
-        onCreatedChapter={(id) => navigate('chapter-detail', id)}
-        onCreatedMemory={(id) => navigate('memory-detail', id)}
+        onCreatedGoal={(id) => navigate('goal-detail', id)}
       />
 
       <BottomNav current={view} onNavigate={navigate} />

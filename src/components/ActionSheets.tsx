@@ -1,37 +1,35 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
-import type { FabAction } from '../data/types';
-import { useAtlas } from '../hooks/useAtlas';
-import { ImagePicker } from './ImagePicker';
+import type { BrainCategory, FabAction } from '../data/types';
+import { useNorth } from '../hooks/useNorth';
+import {
+  categorizeBrain,
+  futureProjection,
+  monthlyReport,
+  weeklyReflection,
+} from '../lib/ai';
+import { uid } from '../lib/images';
 import { Sheet } from './Sheet';
-
-const defaultCover =
-  'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80';
 
 export function ActionSheets({
   action,
   onClose,
-  onCreatedChapter,
-  onCreatedMemory,
+  onCreatedGoal,
 }: {
   action: FabAction;
   onClose: () => void;
-  onCreatedChapter?: (id: string) => void;
-  onCreatedMemory?: (id: string) => void;
+  onCreatedGoal?: (id: string) => void;
 }) {
   return (
     <>
-      <ChapterSheet
-        open={action === 'chapter'}
+      <GoalSheet
+        open={action === 'goal'}
         onClose={onClose}
-        onCreated={onCreatedChapter}
+        onCreated={onCreatedGoal}
       />
-      <MemorySheet
-        open={action === 'memory'}
-        onClose={onClose}
-        onCreated={onCreatedMemory}
-      />
-      <GoalSheet open={action === 'goal'} onClose={onClose} />
-      <AchievementSheet open={action === 'achievement'} onClose={onClose} />
+      <BrainSheet open={action === 'brain'} onClose={onClose} />
+      <ReflectSheet open={action === 'reflect'} onClose={onClose} />
+      <ReportSheet open={action === 'report'} onClose={onClose} />
+      <ProjectSheet open={action === 'project'} onClose={onClose} />
     </>
   );
 }
@@ -51,7 +49,7 @@ function Field({
   );
 }
 
-function ChapterSheet({
+function GoalSheet({
   open,
   onClose,
   onCreated,
@@ -60,213 +58,81 @@ function ChapterSheet({
   onClose: () => void;
   onCreated?: (id: string) => void;
 }) {
-  const { data, addChapter } = useAtlas();
+  const { addGoal } = useNorth();
   const [title, setTitle] = useState('');
-  const [period, setPeriod] = useState('');
-  const [story, setStory] = useState('');
-  const [cover, setCover] = useState('');
-
-  function submit(e: FormEvent) {
-    e.preventDefault();
-    if (!title.trim()) return;
-    const nextNum =
-      Math.max(0, ...data.chapters.map((c) => c.number)) + 1;
-    const id = addChapter({
-      number: nextNum,
-      title: title.trim(),
-      period: period.trim() || 'Present',
-      coverImage: cover || defaultCover,
-      story: story.trim(),
-      status: 'current',
-    });
-    setTitle('');
-    setPeriod('');
-    setStory('');
-    setCover('');
-    onClose();
-    onCreated?.(id);
-  }
-
-  return (
-    <Sheet open={open} title="Create Chapter" onClose={onClose}>
-      <form className="sheet-form" onSubmit={submit}>
-        <ImagePicker
-          label="Cover image"
-          value={cover}
-          onChange={setCover}
-          tall
-        />
-        <Field label="Title">
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Building Myself"
-            required
-          />
-        </Field>
-        <Field label="Period">
-          <input
-            value={period}
-            onChange={(e) => setPeriod(e.target.value)}
-            placeholder="2026 — Present"
-          />
-        </Field>
-        <Field label="Story">
-          <textarea
-            value={story}
-            onChange={(e) => setStory(e.target.value)}
-            placeholder="What is this chapter about?"
-            rows={4}
-          />
-        </Field>
-        <button type="submit" className="btn-primary">
-          Create chapter
-        </button>
-      </form>
-    </Sheet>
-  );
-}
-
-function MemorySheet({
-  open,
-  onClose,
-  onCreated,
-}: {
-  open: boolean;
-  onClose: () => void;
-  onCreated?: (id: string) => void;
-}) {
-  const { addMemory } = useAtlas();
-  const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [story, setStory] = useState('');
-  const [feeling, setFeeling] = useState('');
-  const [image, setImage] = useState('');
-
-  function submit(e: FormEvent) {
-    e.preventDefault();
-    if (!title.trim() || !image) return;
-    const id = addMemory({
-      title: title.trim(),
-      date: date || new Date().toISOString().slice(0, 10),
-      location: location.trim() || 'Somewhere',
-      story: story.trim(),
-      feeling: feeling.trim() || 'Present',
-      image,
-    });
-    setTitle('');
-    setDate('');
-    setLocation('');
-    setStory('');
-    setFeeling('');
-    setImage('');
-    onClose();
-    onCreated?.(id);
-  }
-
-  return (
-    <Sheet open={open} title="Add Memory" onClose={onClose}>
-      <form className="sheet-form" onSubmit={submit}>
-        <ImagePicker
-          label="Photo"
-          value={image}
-          onChange={setImage}
-          tall
-        />
-        <Field label="Title">
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="A moment worth keeping"
-            required
-          />
-        </Field>
-        <Field label="Date">
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </Field>
-        <Field label="Location">
-          <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Tokyo"
-          />
-        </Field>
-        <Field label="Story">
-          <textarea
-            value={story}
-            onChange={(e) => setStory(e.target.value)}
-            placeholder="What happened?"
-            rows={3}
-          />
-        </Field>
-        <Field label="Feeling">
-          <input
-            value={feeling}
-            onChange={(e) => setFeeling(e.target.value)}
-            placeholder="Alive, grateful, proud…"
-          />
-        </Field>
-        <button type="submit" className="btn-primary" disabled={!image}>
-          Save memory
-        </button>
-      </form>
-    </Sheet>
-  );
-}
-
-function GoalSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { addGoal } = useAtlas();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [icon, setIcon] = useState('✦');
+  const [vision, setVision] = useState('');
+  const [why, setWhy] = useState('');
+  const [currentLabel, setCurrent] = useState('');
+  const [targetLabel, setTarget] = useState('');
   const [progress, setProgress] = useState(10);
 
   function submit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
-    addGoal({
+    const id = addGoal({
       title: title.trim(),
-      icon: icon || '✦',
-      description: description.trim(),
-      progress: Math.min(1, Math.max(0, progress / 100)),
+      icon: '✦',
+      vision: vision.trim() || title.trim(),
+      why: why.trim() || 'This matters to who I am becoming.',
+      currentLabel: currentLabel.trim() || 'Starting',
+      targetLabel: targetLabel.trim() || 'Complete',
+      progress: progress / 100,
+      timeline: 'Now',
+      reflection: '',
+      milestones: [
+        { id: uid('ms'), title: 'Define the path', done: false },
+        { id: uid('ms'), title: 'Build momentum', done: false },
+        { id: uid('ms'), title: 'Hit the target', done: false },
+      ],
     });
     setTitle('');
-    setDescription('');
-    setIcon('✦');
+    setVision('');
+    setWhy('');
+    setCurrent('');
+    setTarget('');
     setProgress(10);
     onClose();
+    onCreated?.(id);
   }
 
   return (
-    <Sheet open={open} title="Add Goal" onClose={onClose}>
+    <Sheet open={open} title="New goal mission" onClose={onClose}>
       <form className="sheet-form" onSubmit={submit}>
-        <Field label="Title">
+        <Field label="Goal">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Explore the world"
+            placeholder="Financial Freedom"
             required
           />
         </Field>
-        <Field label="Icon">
-          <input
-            value={icon}
-            onChange={(e) => setIcon(e.target.value)}
-            placeholder="🌎"
-            maxLength={4}
+        <Field label="Vision">
+          <textarea
+            value={vision}
+            onChange={(e) => setVision(e.target.value)}
+            rows={2}
+            placeholder="Build enough wealth to have freedom."
           />
         </Field>
-        <Field label="Description">
+        <Field label="Why this matters">
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            placeholder="Why this matters"
+            value={why}
+            onChange={(e) => setWhy(e.target.value)}
+            rows={2}
+          />
+        </Field>
+        <Field label="Current">
+          <input
+            value={currentLabel}
+            onChange={(e) => setCurrent(e.target.value)}
+            placeholder="RM50,000"
+          />
+        </Field>
+        <Field label="Target">
+          <input
+            value={targetLabel}
+            onChange={(e) => setTarget(e.target.value)}
+            placeholder="RM500,000"
           />
         </Field>
         <Field label={`Progress — ${progress}%`}>
@@ -279,83 +145,208 @@ function GoalSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
           />
         </Field>
         <button type="submit" className="btn-primary">
-          Add goal
+          Create mission
         </button>
       </form>
     </Sheet>
   );
 }
 
-function AchievementSheet({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const { addAchievement } = useAtlas();
+function BrainSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { addBrain } = useNorth();
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
-  const [description, setDescription] = useState('');
-  const [reflection, setReflection] = useState('');
-  const [image, setImage] = useState('');
+  const [content, setContent] = useState('');
+  const [preview, setPreview] = useState<ReturnType<typeof categorizeBrain> | null>(
+    null,
+  );
+
+  function analyze() {
+    if (!title.trim() && !content.trim()) return;
+    setPreview(categorizeBrain(title, content));
+  }
 
   function submit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
-    addAchievement({
+    const ai = preview ?? categorizeBrain(title, content);
+    addBrain({
       title: title.trim(),
-      date: date || new Date().toISOString().slice(0, 7),
-      description: description.trim(),
-      reflection: reflection.trim(),
-      image: image || undefined,
+      content: content.trim(),
+      category: ai.category as BrainCategory,
+      related: ai.related,
+      potential: ai.potential,
+      tags: ai.tags,
+      date: new Date().toISOString().slice(0, 10),
     });
     setTitle('');
-    setDate('');
-    setDescription('');
-    setReflection('');
-    setImage('');
+    setContent('');
+    setPreview(null);
     onClose();
   }
 
   return (
-    <Sheet open={open} title="Add Achievement" onClose={onClose}>
+    <Sheet open={open} title="Capture to Brain" onClose={onClose}>
       <form className="sheet-form" onSubmit={submit}>
-        <ImagePicker label="Photo (optional)" value={image} onChange={setImage} />
         <Field label="Title">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Bought my first home"
+            placeholder="Build a SaaS product"
             required
           />
         </Field>
-        <Field label="Date">
-          <input
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            placeholder="2026-03"
+        <Field label="Content">
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            rows={4}
+            placeholder="What is the idea, lesson, or decision?"
           />
         </Field>
-        <Field label="Description">
+        <button type="button" className="btn-ghost full" onClick={analyze}>
+          AI categorize
+        </button>
+        {preview && (
+          <div className="ai-preview">
+            <p>
+              <strong>Category</strong> {preview.category}
+            </p>
+            <p>
+              <strong>Related</strong> {preview.related}
+            </p>
+            <p>
+              <strong>Potential</strong> {preview.potential}
+            </p>
+          </div>
+        )}
+        <button type="submit" className="btn-primary">
+          Save to vault
+        </button>
+      </form>
+    </Sheet>
+  );
+}
+
+function ReflectSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [input, setInput] = useState('');
+  const [result, setResult] = useState<ReturnType<typeof weeklyReflection> | null>(
+    null,
+  );
+
+  function run(e: FormEvent) {
+    e.preventDefault();
+    if (!input.trim()) return;
+    setResult(weeklyReflection(input));
+  }
+
+  return (
+    <Sheet open={open} title="Weekly reflection AI" onClose={onClose}>
+      <form className="sheet-form" onSubmit={run}>
+        <Field label="What happened this week?">
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={2}
-          />
-        </Field>
-        <Field label="Reflection">
-          <textarea
-            value={reflection}
-            onChange={(e) => setReflection(e.target.value)}
-            rows={3}
-            placeholder="What did this mean to you?"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            rows={4}
+            placeholder="Shipped features, saved consistently, felt distracted mid-week…"
+            required
           />
         </Field>
         <button type="submit" className="btn-primary">
-          Save achievement
+          Generate reflection
         </button>
       </form>
+      {result && (
+        <div className="ai-result">
+          <p className="eyebrow">Summary</p>
+          <p>{result.summary}</p>
+          <p className="eyebrow spaced">Patterns</p>
+          <ul>
+            {result.patterns.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+          <p className="eyebrow spaced">Lessons</p>
+          <ul>
+            {result.lessons.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+          <p className="eyebrow spaced">Suggestions</p>
+          <ul>
+            {result.suggestions.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </Sheet>
+  );
+}
+
+function ReportSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { data } = useNorth();
+  const wealth = data.lifeAreas.find((a) => a.id === 'wealth')?.progress ?? 0;
+  const career = data.lifeAreas.find((a) => a.id === 'career')?.progress ?? 0;
+  const knowledge =
+    data.lifeAreas.find((a) => a.id === 'knowledge')?.progress ?? 0;
+  const milestones = data.goals.flatMap((g) => g.milestones);
+  const report = monthlyReport({
+    wealthProgress: wealth,
+    careerProgress: career,
+    knowledgeProgress: knowledge,
+    goalsDone: milestones.filter((m) => m.done).length,
+    goalsTotal: milestones.length || 1,
+  });
+
+  return (
+    <Sheet open={open} title="Monthly life report" onClose={onClose}>
+      <div className="ai-result">
+        <p className="eyebrow">Money progress</p>
+        <p>{report.money}</p>
+        <p className="eyebrow spaced">Career growth</p>
+        <p>{report.career}</p>
+        <p className="eyebrow spaced">Personal development</p>
+        <p>{report.development}</p>
+        <p className="eyebrow spaced">Achievements</p>
+        <p>{report.achievements}</p>
+      </div>
+    </Sheet>
+  );
+}
+
+function ProjectSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [monthly, setMonthly] = useState(2000);
+  const [years, setYears] = useState(5);
+  const result = futureProjection(monthly, years);
+
+  return (
+    <Sheet open={open} title="Future projection" onClose={onClose}>
+      <div className="sheet-form">
+        <Field label={`Monthly save — RM${monthly.toLocaleString()}`}>
+          <input
+            type="range"
+            min={500}
+            max={10000}
+            step={100}
+            value={monthly}
+            onChange={(e) => setMonthly(Number(e.target.value))}
+          />
+        </Field>
+        <Field label={`Horizon — ${years} years`}>
+          <input
+            type="range"
+            min={1}
+            max={15}
+            value={years}
+            onChange={(e) => setYears(Number(e.target.value))}
+          />
+        </Field>
+        <div className="projection-hero">
+          <p className="focus-label">Estimated wealth</p>
+          <p className="projection-num">{result.estimated}</p>
+          <p className="projection-note">{result.note}</p>
+        </div>
+      </div>
     </Sheet>
   );
 }

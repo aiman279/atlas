@@ -1,94 +1,109 @@
-export interface Moment {
-  id: string;
-  kind: 'achievement' | 'decision' | 'experience' | 'lesson';
-  title: string;
-  date: string;
-  reflection: string;
-  image?: string;
-}
-
-export interface Chapter {
-  id: string;
-  number: number;
-  title: string;
-  subtitle?: string;
-  period: string;
-  coverImage: string;
-  story: string;
-  status: 'current' | 'past' | 'upcoming';
-  moments: Moment[];
-}
-
-export interface Memory {
-  id: string;
-  title: string;
-  date: string;
-  location: string;
-  story: string;
-  feeling: string;
-  image: string;
-}
-
-export interface Goal {
-  id: string;
-  title: string;
-  icon: string;
-  description: string;
-  progress: number;
-  reflection?: string;
-  date?: string;
-}
-
-export interface Achievement {
-  id: string;
-  title: string;
-  date: string;
-  description: string;
-  reflection: string;
-  image?: string;
-}
-
-export interface FocusArea {
+export interface LifeArea {
   id: string;
   label: string;
   icon: string;
+  progress: number;
 }
 
-export interface Milestone {
+export interface TodayPulse {
+  mission: string;
+  energy: number;
+  mood: string;
+}
+
+export interface GoalMilestone {
+  id: string;
   title: string;
+  done: boolean;
+}
+
+export interface GoalMission {
+  id: string;
+  title: string;
+  icon: string;
+  vision: string;
+  why: string;
+  currentLabel: string;
+  targetLabel: string;
+  progress: number;
+  timeline: string;
+  reflection: string;
+  milestones: GoalMilestone[];
+}
+
+export type BrainCategory =
+  | 'Idea'
+  | 'Lesson'
+  | 'Insight'
+  | 'Decision'
+  | 'Knowledge'
+  | 'Business'
+  | 'Career'
+  | 'Life';
+
+export interface BrainItem {
+  id: string;
+  title: string;
+  content: string;
+  category: BrainCategory;
+  related?: string;
+  potential?: 'High' | 'Medium' | 'Low';
+  tags: string[];
   date: string;
-  daysAway: number;
 }
 
-export interface Profile {
+export interface YearMetric {
+  label: string;
+  value: string;
+}
+
+export interface EvolutionYear {
+  year: number;
+  title: string;
+  metrics: YearMetric[];
+  pastSelf: string;
+  currentSelf: string;
+  comparisons: string[];
+}
+
+export interface IdentityProfile {
   name: string;
-  philosophy: string;
+  archetype: string;
   values: string[];
+  rules: string[];
+  workBestWhen: string[];
+  struggleWhen: string[];
   photo?: string;
-  currentChapterId: string;
-  focusAreas: FocusArea[];
-  nextMilestone: Milestone;
+  currentState: string;
+  stateNote: string;
 }
 
-export interface AtlasData {
-  profile: Profile;
-  chapters: Chapter[];
-  memories: Memory[];
-  goals: Goal[];
-  achievements: Achievement[];
+export interface ThemePrefs {
+  mode: 'dark' | 'light';
+}
+
+export interface NorthData {
+  profile: IdentityProfile;
+  lifeAreas: LifeArea[];
+  today: TodayPulse;
+  goals: GoalMission[];
+  brain: BrainItem[];
+  evolution: EvolutionYear[];
+  theme: ThemePrefs;
 }
 
 export type AppView =
-  | 'home'
-  | 'chapters'
-  | 'chapter-detail'
-  | 'memories'
-  | 'memory-detail'
-  | 'me';
+  | 'command'
+  | 'goals'
+  | 'goal-detail'
+  | 'brain'
+  | 'evolution'
+  | 'identity';
 
 export type FabAction =
-  | 'chapter'
-  | 'memory'
   | 'goal'
-  | 'achievement'
+  | 'brain'
+  | 'reflect'
+  | 'report'
+  | 'project'
   | null;

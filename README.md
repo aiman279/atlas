@@ -1,24 +1,22 @@
-# Atlas
+# North OS
 
-A personal life operating system — your digital autobiography.
+An AI-powered personal life operating system.
 
-Capture life chapters, memories, goals, and achievements in a calm, premium mobile experience.
+Understand who you are, where you are, where you want to go, and how you are evolving.
+
+## Sections
+
+- **Command** — current life state & balance
+- **Goals** — mission roadmaps
+- **Brain** — knowledge vault
+- **Evolution** — yearly life analytics
+- **Identity** — values, rules, operating manual
 
 ## Stack
 
-- Vite + React + TypeScript
-- Framer Motion
-- localStorage (`atlas-life-v1`)
-
-## Develop
+Vite · React · TypeScript · Framer Motion · localStorage (`north-os-v1`)
 
 ```bash
 npm install
 npm run dev
-```
-
-## Build
-
-```bash
-npm run build
 ```
