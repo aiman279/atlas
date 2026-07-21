@@ -1,13 +1,13 @@
 import type { AppView } from '../data/types';
 import './BottomNav.css';
 
-const items: { view: AppView; label: string; icon: string }[] = [
-  { view: 'home', label: 'Home', icon: '🏠' },
-  { view: 'journeys', label: 'Journeys', icon: '🌍' },
-  { view: 'stories', label: 'Stories', icon: '📖' },
-  { view: 'map', label: 'Map', icon: '🗺️' },
-  { view: 'achievements', label: 'Wins', icon: '⚡' },
-  { view: 'fund', label: 'Fund', icon: '💰' },
+const items: { view: AppView; icon: string; label: string }[] = [
+  { view: 'dashboard', icon: '🏠', label: 'Home' },
+  { view: 'missions', icon: '🧭', label: 'Missions' },
+  { view: 'gear', icon: '🎒', label: 'Gear' },
+  { view: 'fund', icon: '💰', label: 'Fund' },
+  { view: 'explore', icon: '🌎', label: 'Explore' },
+  { view: 'profile', icon: '⚙️', label: 'Profile' },
 ];
 
 export function BottomNav({
@@ -15,14 +15,9 @@ export function BottomNav({
   onNavigate,
 }: {
   current: AppView;
-  onNavigate: (view: AppView) => void;
+  onNavigate: (v: AppView) => void;
 }) {
-  const active =
-    current === 'journey-detail'
-      ? 'journeys'
-      : current === 'dreams'
-        ? 'home'
-        : current;
+  const active = current === 'mission-detail' ? 'missions' : current;
 
   return (
     <nav className="bottom-nav" aria-label="Main">
@@ -30,14 +25,12 @@ export function BottomNav({
         <button
           key={item.view}
           type="button"
-          className={`bottom-nav-item${active === item.view ? ' is-active' : ''}`}
+          className={active === item.view ? 'is-active' : undefined}
           onClick={() => onNavigate(item.view)}
           aria-current={active === item.view ? 'page' : undefined}
         >
-          <span className="bottom-nav-icon" aria-hidden>
-            {item.icon}
-          </span>
-          <span className="bottom-nav-label">{item.label}</span>
+          <span aria-hidden>{item.icon}</span>
+          <span>{item.label}</span>
         </button>
       ))}
     </nav>

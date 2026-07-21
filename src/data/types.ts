@@ -1,13 +1,11 @@
-export type Mood =
-  | 'Nervous'
-  | 'Excited'
-  | 'Curious'
-  | 'Anxious'
-  | 'Calm'
-  | 'Confident'
-  | 'Grateful'
-  | 'Inspired';
-
+export type MissionStatus = 'preparing' | 'active' | 'completed';
+export type ChecklistGroup = 'documents' | 'transport' | 'knowledge';
+export type GearCategory =
+  | 'Technology'
+  | 'Clothing'
+  | 'Health'
+  | 'Documents'
+  | 'Accessories';
 export type IncomeSource = 'Salary' | 'Grab' | 'Side income';
 export type ExpenseCategory =
   | 'Flight'
@@ -15,76 +13,51 @@ export type ExpenseCategory =
   | 'Food'
   | 'Transport'
   | 'Activities';
+export type Priority = 'High' | 'Medium' | 'Low';
 
-export interface Reflection {
-  beforeMood: Mood;
-  beforeThought: string;
-  afterMood: Mood;
-  afterLesson: string;
+export interface ChecklistItem {
+  id: string;
+  label: string;
+  group: ChecklistGroup;
+  done: boolean;
 }
 
-export interface Journey {
-  id: string;
-  chapter: number;
-  country: string;
-  countryCode: string;
-  flag: string;
-  city: string;
+export interface TimelineDay {
+  day: number;
   title: string;
-  tagline: string;
-  coverImage: string;
+  note?: string;
+}
+
+export interface BudgetLine {
+  category: ExpenseCategory;
+  amount: number;
+}
+
+export interface Mission {
+  id: string;
+  title: string;
+  flag: string;
+  country: string;
+  status: MissionStatus;
   startDate: string;
-  endDate: string;
   durationDays: number;
   budget: number;
-  placesVisited: string[];
-  personalStory: string;
-  lessonsLearned: string[];
-  favouriteMoment: string;
-  rating: number;
-  photos: string[];
-  reflection: Reflection;
-  status: 'completed' | 'upcoming';
+  coverImage: string;
+  checklist: ChecklistItem[];
+  timeline: TimelineDay[];
+  budgetBreakdown: BudgetLine[];
+  notes: string;
+  isCurrent: boolean;
 }
 
-export interface Story {
+export interface GearItem {
   id: string;
-  title: string;
-  location: string;
-  date: string;
-  photo: string;
-  whatHappened: string;
-  howIFelt: string;
-  whatILearned: string;
-  journeyId?: string;
-}
-
-export interface MapPlace {
-  id: string;
-  country: string;
-  countryCode: string;
-  city: string;
-  type: 'visited' | 'dream';
-  journeyId?: string;
-  memory?: string;
-  lesson?: string;
-  photos: string[];
-}
-
-export interface Achievement {
-  id: string;
-  title: string;
-  icon: string;
-  description: string;
-  unlocked: boolean;
-  unlockedAt?: string;
-  xp: number;
-}
-
-export interface ExplorerProfile {
-  level: number;
-  xp: number;
-  xpToNext: number;
+  name: string;
+  category: GearCategory;
+  weightKg: number;
+  price: number;
+  essential: boolean;
+  timesUsed: number;
 }
 
 export interface FundTransaction {
@@ -97,59 +70,63 @@ export interface FundTransaction {
   date: string;
 }
 
-export interface AdventureFund {
-  id: string;
-  name: string;
-  goal: number;
+export interface TravelFund {
+  goalName: string;
+  target: number;
   saved: number;
   currency: string;
-  targetDate: string;
+  dailyBurnRate: number;
   transactions: FundTransaction[];
 }
 
-export interface DreamDestination {
+export interface Destination {
   id: string;
   country: string;
   flag: string;
   why: string;
   estimatedBudget: number;
   targetYear: number;
-  priority: 'high' | 'medium' | 'low';
+  priority: Priority;
   coverImage: string;
 }
 
-export interface LifeChapter {
-  number: number;
-  title: string;
-  subtitle: string;
-}
-
-export interface AtlasStats {
+export interface SoloProfile {
+  name: string;
+  explorerType: string;
+  favouriteStyle: string;
+  travelPersonality: string;
   countriesVisited: number;
-  totalJourneys: number;
-  memoriesCreated: number;
-  achievementsUnlocked: number;
-  citiesVisited: number;
-  travelDays: number;
+  totalTravelDays: number;
+  totalAdventures: number;
+  bio: string;
 }
 
-export interface AtlasData {
-  lifeChapter: LifeChapter;
-  explorer: ExplorerProfile;
-  journeys: Journey[];
-  stories: Story[];
-  places: MapPlace[];
-  achievements: Achievement[];
-  funds: AdventureFund[];
-  dreams: DreamDestination[];
+export interface GearLimits {
+  backpackLimitKg: number;
+}
+
+export interface WaypointData {
+  profile: SoloProfile;
+  missions: Mission[];
+  gear: GearItem[];
+  gearLimits: GearLimits;
+  fund: TravelFund;
+  destinations: Destination[];
 }
 
 export type AppView =
-  | 'home'
-  | 'journeys'
-  | 'journey-detail'
-  | 'stories'
-  | 'map'
-  | 'achievements'
+  | 'dashboard'
+  | 'missions'
+  | 'mission-detail'
+  | 'gear'
   | 'fund'
-  | 'dreams';
+  | 'explore'
+  | 'profile';
+
+export interface ReadinessBreakdown {
+  overall: number;
+  money: number;
+  planning: number;
+  gear: number;
+  knowledge: number;
+}

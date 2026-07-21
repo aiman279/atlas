@@ -1,17 +1,25 @@
-import { motion } from 'framer-motion';
 import { useMemo } from 'react';
-import { formatMoney, fundProgress } from '../data/atlas';
+import {
+  formatMoney,
+  pct,
+  travelFreedomDays,
+} from '../data/waypoint';
 import type { ExpenseCategory, IncomeSource } from '../data/types';
-import { useAtlas } from '../hooks/useAtlas';
-import { PageHeader, ProgressRing } from '../components/ui';
+import { useWaypoint } from '../hooks/useWaypoint';
+import {
+  Card,
+  PageHeader,
+  ProgressRing,
+  SectionLabel,
+} from '../components/ui';
 
 export function FundView() {
-  const { data } = useAtlas();
-  const fund = data.funds[0];
+  const { data } = useWaypoint();
+  const { fund } = data;
+  const progress = pct(fund.saved, fund.target);
+  const freedom = travelFreedomDays(data);
 
-  const progress = fundProgress(fund.saved, fund.goal);
-
-  const incomeBySource = useMemo(() => {
+  const income = useMemo(() => {
     const map: Record<IncomeSource, number> = {
       Salary: 0,
       Grab: 0,
@@ -25,7 +33,7 @@ export function FundView() {
     return map;
   }, [fund.transactions]);
 
-  const expenseByCategory = useMemo(() => {
+  const expenses = useMemo(() => {
     const map: Record<ExpenseCategory, number> = {
       Flight: 0,
       Hotel: 0,
@@ -41,106 +49,107 @@ export function FundView() {
     return map;
   }, [fund.transactions]);
 
-  const totalExpense = Object.values(expenseByCategory).reduce((a, b) => a + b, 0);
+  const expenseTotal = Object.values(expenses).reduce((a, b) => a + b, 0);
 
   return (
     <div className="view">
       <PageHeader
-        eyebrow="Adventure Fund"
-        title={fund.name}
-        subtitle="Prepare quietly. Arrive ready."
+        eyebrow="Travel Fund"
+        title={fund.goalName}
+        subtitle="Save with intention. Know when you can go."
       />
 
-      <motion.section
-        className="fund-hero card soft-pad"
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <Card className="fund-hero mb">
         <ProgressRing
-          progress={progress}
-          size={140}
+          value={progress}
+          size={130}
           label={`${progress}%`}
-          sublabel="saved"
+          sub="saved"
         />
-        <div className="fund-hero-text">
+        <div className="fund-nums">
           <div>
-            <p className="meta-k">Goal</p>
-            <p className="fund-big">{formatMoney(fund.goal, fund.currency)}</p>
+            <p className="meta-k">Target</p>
+            <p className="big">{formatMoney(fund.target, fund.currency)}</p>
           </div>
           <div>
             <p className="meta-k">Saved</p>
-            <p className="fund-big sage">{formatMoney(fund.saved, fund.currency)}</p>
-          </div>
-          <div>
-            <p className="meta-k">Remaining</p>
-            <p className="fund-big">
-              {formatMoney(Math.max(0, fund.goal - fund.saved), fund.currency)}
+            <p className="big blue">
+              {formatMoney(fund.saved, fund.currency)}
             </p>
           </div>
         </div>
-      </motion.section>
+      </Card>
 
-      <section>
-        <h2 className="section-label">Income sources</h2>
-        <div className="budget-cards">
-          {(Object.entries(incomeBySource) as [IncomeSource, number][]).map(
-            ([source, amount]) => (
-              <div key={source} className="budget-card card">
-                <p className="meta-k">{source}</p>
-                <p className="meta-v">{formatMoney(amount, fund.currency)}</p>
-              </div>
-            ),
-          )}
-        </div>
-      </section>
+      <Card className="freedom-card mb">
+        <SectionLabel>Travel Freedom</SectionLabel>
+        <p className="freedom-text">
+          Based on my savings:
+          <br />
+          <strong>
+            You can comfortably travel for {freedom} days
+          </strong>
+        </p>
+        <p className="muted">
+          At ~{formatMoney(fund.dailyBurnRate, fund.currency)}/day
+        </p>
+      </Card>
 
-      <section>
-        <h2 className="section-label">Spending breakdown</h2>
-        <div className="spend-list card soft-pad">
-          {(Object.entries(expenseByCategory) as [ExpenseCategory, number][])
-            .filter(([, amount]) => amount > 0 || totalExpense === 0)
-            .map(([category, amount]) => {
-              const pct =
-                totalExpense > 0 ? Math.round((amount / totalExpense) * 100) : 0;
-              return (
-                <div key={category} className="spend-row">
-                  <div className="spend-top">
-                    <span>{category}</span>
-                    <span>{formatMoney(amount, fund.currency)}</span>
-                  </div>
-                  <div className="progress-bar">
-                    <span style={{ width: `${pct}%` }} />
-                  </div>
+      <SectionLabel>Income sources</SectionLabel>
+      <div className="three-grid mb">
+        {(Object.entries(income) as [IncomeSource, number][]).map(
+          ([k, v]) => (
+            <Card key={k} className="mini">
+              <p className="meta-k">{k}</p>
+              <p className="meta-v">{formatMoney(v, fund.currency)}</p>
+            </Card>
+          ),
+        )}
+      </div>
+
+      <SectionLabel>Spending breakdown</SectionLabel>
+      <Card className="mb">
+        <ul className="spend">
+          {(Object.entries(expenses) as [ExpenseCategory, number][])
+            .filter(([, v]) => v > 0)
+            .map(([k, v]) => (
+              <li key={k}>
+                <div className="spend-top">
+                  <span>{k}</span>
+                  <span>{formatMoney(v, fund.currency)}</span>
                 </div>
-              );
-            })}
-          {totalExpense === 0 && (
-            <p className="muted">No expenses logged yet.</p>
-          )}
-        </div>
-      </section>
+                <div className="bar">
+                  <span
+                    style={{
+                      width: `${expenseTotal ? pct(v, expenseTotal) : 0}%`,
+                    }}
+                  />
+                </div>
+              </li>
+            ))}
+        </ul>
+      </Card>
 
-      <section>
-        <h2 className="section-label">Recent activity</h2>
-        <ul className="tx-list">
-          {[...fund.transactions]
-            .sort((a, b) => b.date.localeCompare(a.date))
-            .map((t) => (
-              <li key={t.id} className="tx-row card">
+      <SectionLabel>Saving timeline</SectionLabel>
+      <ul className="stack">
+        {[...fund.transactions]
+          .sort((a, b) => b.date.localeCompare(a.date))
+          .map((t) => (
+            <li key={t.id}>
+              <Card className="tx">
                 <div>
-                  <p className="tx-note">{t.note}</p>
+                  <p className="gear-name">{t.note}</p>
                   <p className="muted">
                     {t.type === 'income' ? t.source : t.category} · {t.date}
                   </p>
                 </div>
-                <p className={t.type === 'income' ? 'tx-in' : 'tx-out'}>
+                <p className={t.type === 'income' ? 'in' : 'out'}>
                   {t.type === 'income' ? '+' : '−'}
                   {formatMoney(t.amount, fund.currency)}
                 </p>
-              </li>
-            ))}
-        </ul>
-      </section>
+              </Card>
+            </li>
+          ))}
+      </ul>
     </div>
   );
 }

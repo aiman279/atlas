@@ -1,93 +1,54 @@
 .page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .eyebrow {
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--sage);
-  margin-bottom: 0.55rem;
+  color: var(--ink-3);
+  margin-bottom: 0.4rem;
 }
 
-.page-title {
-  font-size: clamp(2rem, 6vw, 2.75rem);
-  color: var(--ink);
+.page-header h1 {
+  font-size: clamp(1.9rem, 5vw, 2.4rem);
 }
 
-.page-subtitle {
-  margin-top: 0.55rem;
-  color: var(--ink-soft);
-  font-size: 0.98rem;
-  font-weight: 400;
+.page-sub {
+  margin-top: 0.4rem;
+  color: var(--ink-2);
+  font-size: 0.95rem;
   max-width: 28rem;
 }
 
 .card {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: var(--bg-elevated);
-  border: 1px solid var(--line);
+  background: var(--card);
   border-radius: var(--radius);
+  border: 1px solid var(--line);
   box-shadow: var(--shadow);
-  padding: 1.15rem;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  padding: 1.1rem 1.15rem;
 }
 
 button.card {
-  cursor: pointer;
+  width: 100%;
+  text-align: left;
   border: 1px solid var(--line);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 button.card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-lg);
 }
 
-.stat-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: var(--bg-elevated);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-}
-
-.stat-icon {
-  font-size: 1.25rem;
-  line-height: 1;
-}
-
-.stat-value {
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  line-height: 1;
-}
-
-.stat-label {
-  margin-top: 0.2rem;
-  font-size: 0.78rem;
-  color: var(--ink-muted);
-}
-
-.progress-ring {
+.ring {
   position: relative;
   display: grid;
   place-items: center;
 }
 
-.progress-ring svg {
-  display: block;
-}
-
-.progress-ring-label {
+.ring-label {
   position: absolute;
   inset: 0;
   display: flex;
@@ -97,51 +58,76 @@ button.card:hover {
   text-align: center;
 }
 
-.progress-ring-pct {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
+.ring-label strong {
+  font-family: var(--display);
+  font-size: 1.45rem;
+  font-weight: 400;
   line-height: 1;
 }
 
-.progress-ring-sub {
-  margin-top: 0.2rem;
-  font-size: 0.72rem;
-  color: var(--ink-muted);
+.ring-label span {
+  margin-top: 0.15rem;
+  font-size: 0.7rem;
+  color: var(--ink-3);
 }
 
-.progress-bar {
+.bar {
   height: 6px;
   border-radius: 999px;
-  background: var(--stone-soft);
+  background: var(--fill);
   overflow: hidden;
 }
 
-.progress-bar > span {
+.bar > span {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--sage), #4a8f76);
-  transition: width 0.5s ease;
+  background: var(--blue);
+  transition: width 0.4s ease;
 }
 
-.back-btn {
+.back {
   border: none;
   background: transparent;
-  color: var(--ink-soft);
-  font-size: 0.9rem;
+  color: var(--blue);
   font-weight: 500;
-  padding: 0.25rem 0;
-  margin-bottom: 1rem;
-  cursor: pointer;
+  font-size: 0.92rem;
+  padding: 0;
+  margin-bottom: 0.85rem;
 }
 
-.back-btn:hover {
-  color: var(--ink);
+.section-label {
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 0.7rem;
 }
 
-.empty-hint {
-  color: var(--ink-muted);
-  font-size: 0.95rem;
-  padding: 2rem 0;
-  text-align: center;
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--fill);
+  color: var(--ink-2);
+}
+
+.pill-blue {
+  background: rgba(0, 113, 227, 0.12);
+  color: var(--blue);
+}
+
+.pill-green {
+  background: rgba(52, 199, 89, 0.14);
+  color: #248a3d;
+}
+
+.pill-amber {
+  background: rgba(255, 159, 10, 0.16);
+  color: #b36b00;
 }

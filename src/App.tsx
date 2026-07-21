@@ -2,36 +2,46 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { BottomNav } from './components/BottomNav';
 import type { AppView } from './data/types';
-import { AtlasProvider } from './hooks/useAtlas';
-import { AchievementsView } from './views/AchievementsView';
-import { DreamsView } from './views/DreamsView';
+import { WaypointProvider, useWaypoint } from './hooks/useWaypoint';
+import { DashboardView } from './views/DashboardView';
+import { ExploreView } from './views/ExploreView';
 import { FundView } from './views/FundView';
-import { HomeView } from './views/HomeView';
-import { JourneyDetailView } from './views/JourneyDetailView';
-import { JourneysView } from './views/JourneysView';
-import { MapView } from './views/MapView';
-import { StoriesView } from './views/StoriesView';
+import { GearView } from './views/GearView';
+import { MissionDetailView } from './views/MissionDetailView';
+import { MissionsView } from './views/MissionsView';
+import { ProfileView } from './views/ProfileView';
 import './styles/global.css';
 import './views/views.css';
 
 export default function App() {
   return (
-    <AtlasProvider>
-      <AtlasApp />
-    </AtlasProvider>
+    <WaypointProvider>
+      <WaypointApp />
+    </WaypointProvider>
   );
 }
 
-function AtlasApp() {
-  const [view, setView] = useState<AppView>('home');
-  const [journeyId, setJourneyId] = useState<string | null>(null);
+function WaypointApp() {
+  const { addExpense } = useWaypoint();
+  const [view, setView] = useState<AppView>('dashboard');
+  const [missionId, setMissionId] = useState<string | null>(null);
+  const [expenseOpen, setExpenseOpen] = useState(false);
+  const [expenseAmount, setExpenseAmount] = useState('');
+  const [expenseNote, setExpenseNote] = useState('');
 
   function navigate(next: AppView, id?: string) {
-    if (next === 'journey-detail' && id) {
-      setJourneyId(id);
-    }
+    if (next === 'mission-detail' && id) setMissionId(id);
     setView(next);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function submitExpense() {
+    const amount = Number(expenseAmount);
+    if (!amount || amount <= 0) return;
+    addExpense(amount, expenseNote.trim() || 'Quick expense');
+    setExpenseAmount('');
+    setExpenseNote('');
+    setExpenseOpen(false);
   }
 
   return (
@@ -39,35 +49,73 @@ function AtlasApp() {
       <main className="app-main">
         <AnimatePresence mode="wait">
           <motion.div
-            key={view === 'journey-detail' ? `journey-${journeyId}` : view}
+            key={view === 'mission-detail' ? `m-${missionId}` : view}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25 }}
           >
-            {view === 'home' && <HomeView onNavigate={navigate} />}
-            {view === 'journeys' && (
-              <JourneysView
-                onOpen={(id) => navigate('journey-detail', id)}
+            {view === 'dashboard' && (
+              <DashboardView
+                onNavigate={navigate}
+                onQuickExpense={() => setExpenseOpen(true)}
               />
             )}
-            {view === 'journey-detail' && journeyId && (
-              <JourneyDetailView
-                journeyId={journeyId}
-                onBack={() => navigate('journeys')}
+            {view === 'missions' && (
+              <MissionsView
+                onOpen={(id) => navigate('mission-detail', id)}
               />
             )}
-            {view === 'stories' && <StoriesView />}
-            {view === 'map' && <MapView />}
-            {view === 'achievements' && <AchievementsView />}
+            {view === 'mission-detail' && missionId && (
+              <MissionDetailView
+                missionId={missionId}
+                onBack={() => navigate('missions')}
+              />
+            )}
+            {view === 'gear' && <GearView />}
             {view === 'fund' && <FundView />}
-            {view === 'dreams' && (
-              <DreamsView onBack={() => navigate('home')} />
-            )}
+            {view === 'explore' && <ExploreView />}
+            {view === 'profile' && <ProfileView />}
           </motion.div>
         </AnimatePresence>
       </main>
+
       <BottomNav current={view} onNavigate={navigate} />
+
+      {expenseOpen && (
+        <div className="modal-backdrop" role="presentation">
+          <div className="modal" role="dialog" aria-label="Add expense">
+            <h3>Add Expense</h3>
+            <label>
+              Amount (RM)
+              <input
+                type="number"
+                inputMode="decimal"
+                value={expenseAmount}
+                onChange={(e) => setExpenseAmount(e.target.value)}
+                placeholder="100"
+              />
+            </label>
+            <label>
+              Note
+              <input
+                type="text"
+                value={expenseNote}
+                onChange={(e) => setExpenseNote(e.target.value)}
+                placeholder="What for?"
+              />
+            </label>
+            <div className="modal-actions">
+              <button type="button" className="ghost" onClick={() => setExpenseOpen(false)}>
+                Cancel
+              </button>
+              <button type="button" className="primary" onClick={submitExpense}>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
