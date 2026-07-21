@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { NorthLogo } from '../components/NorthLogo';
 import { useNorth } from '../hooks/useNorth';
 
 function greeting() {
@@ -15,13 +16,14 @@ export function CommandView() {
   return (
     <div className="page command-page">
       <header className="os-brand">
-        <motion.p
-          className="brand-mark"
+        <motion.div
+          className="brand-row"
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          North OS
-        </motion.p>
+          <NorthLogo size={30} />
+          <p className="brand-mark">North OS</p>
+        </motion.div>
         <motion.p
           className="os-greeting"
           initial={{ opacity: 0 }}

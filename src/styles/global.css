@@ -154,6 +154,17 @@ ol {
   margin: 0;
 }
 
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.north-logo {
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
 .os-greeting {
   margin-top: 0.4rem;
   color: var(--ink-2);
