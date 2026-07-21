@@ -75,7 +75,7 @@
 }
 
 .milestone-meta {
-  color: var(--ink-3);
+  color: var(--accent);
   font-size: 0.85rem;
 }
 
@@ -363,7 +363,7 @@
 .goal-bar span {
   display: block;
   height: 100%;
-  background: var(--ink);
+  background: var(--accent);
 }
 
 .achievement-list {

@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
 
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --ink: #0a0a0a;
-  --ink-2: #737373;
-  --ink-3: #a3a3a3;
-  --line: #ebebeb;
-  --accent: #0a0a0a;
-  --accent-soft: #f5f5f5;
+  --bg: #f6f2ec;
+  --surface: #fbf9f6;
+  --ink: #1c1917;
+  --ink-2: #78716c;
+  --ink-3: #a8a29e;
+  --line: #e8e2d9;
+  --accent: #8b7355;
+  --accent-soft: rgba(139, 115, 85, 0.12);
   --radius: 8px;
   --font: 'DM Sans', 'Helvetica Neue', sans-serif;
   --nav-h: 56px;

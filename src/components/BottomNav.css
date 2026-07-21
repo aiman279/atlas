@@ -10,7 +10,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(246, 242, 236, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--line);
@@ -26,6 +26,6 @@
 }
 
 .nav-tab.is-active {
-  color: var(--ink);
+  color: var(--accent);
   font-weight: 500;
 }
