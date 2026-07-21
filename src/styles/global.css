@@ -260,8 +260,10 @@ ol {
 
 .field input,
 .field textarea,
+.field select,
 .sheet-form input,
-.sheet-form textarea {
+.sheet-form textarea,
+.sheet-form select {
   border: 1px solid var(--line);
   background: var(--bg-elev);
   border-radius: var(--radius-sm);

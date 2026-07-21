@@ -60,7 +60,9 @@ function NorthApp() {
               />
             )}
             {view === 'brain' && <BrainView />}
-            {view === 'atlas' && <AtlasView />}
+            {view === 'atlas' && (
+              <AtlasView onAdd={() => setAction('country')} />
+            )}
             {view === 'evolution' && <EvolutionView />}
             {view === 'identity' && <IdentityView />}
           </motion.div>
@@ -80,6 +82,7 @@ function NorthApp() {
         action={action}
         onClose={() => setAction(null)}
         onCreatedGoal={(id) => navigate('goal-detail', id)}
+        onCreatedCountry={() => navigate('atlas')}
       />
 
       <BottomNav current={view} onNavigate={navigate} />

@@ -14,6 +14,7 @@ import type {
   NorthData,
   ThemePrefs,
   TodayPulse,
+  VisitedCountry,
 } from '../data/types';
 import { uid } from '../lib/images';
 
@@ -22,6 +23,7 @@ interface NorthContextValue {
   addGoal: (input: Omit<GoalMission, 'id' | 'milestones'> & { milestones?: GoalMission['milestones'] }) => string;
   updateGoal: (id: string, patch: Partial<GoalMission>) => void;
   addBrain: (input: Omit<BrainItem, 'id'>) => string;
+  addCountry: (input: Omit<VisitedCountry, 'id'>) => string;
   updateProfile: (patch: Partial<IdentityProfile>) => void;
   updateLifeAreas: (areas: LifeArea[]) => void;
   updateToday: (patch: Partial<TodayPulse>) => void;
@@ -75,6 +77,29 @@ export function NorthProvider({ children }: { children: ReactNode }) {
         ...prev,
         brain: [{ ...input, id }, ...prev.brain],
       }));
+      return id;
+    },
+    addCountry(input) {
+      const id = uid('country');
+      set((prev) => {
+        const exists = prev.atlas.some(
+          (c) => c.isoNumeric === input.isoNumeric || c.name === input.name,
+        );
+        if (exists) {
+          return {
+            ...prev,
+            atlas: prev.atlas.map((c) =>
+              c.isoNumeric === input.isoNumeric || c.name === input.name
+                ? { ...c, ...input, id: c.id }
+                : c,
+            ),
+          };
+        }
+        return {
+          ...prev,
+          atlas: [{ ...input, id }, ...prev.atlas],
+        };
+      });
       return id;
     },
     updateProfile(patch) {

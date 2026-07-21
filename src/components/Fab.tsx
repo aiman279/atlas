@@ -4,6 +4,7 @@ import './Fab.css';
 
 const actions: { id: Exclude<FabAction, null>; label: string; hint: string }[] =
   [
+    { id: 'country', label: 'Add country', hint: 'Mark a place on Atlas' },
     { id: 'goal', label: 'New goal mission', hint: 'Turn a dream into a path' },
     { id: 'brain', label: 'Capture to Brain', hint: 'Idea, lesson, decision' },
     { id: 'reflect', label: 'Weekly reflection', hint: 'AI summary & patterns' },

@@ -1,4 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
+import { COUNTRY_OPTIONS } from '../data/countries';
 import type { BrainCategory, FabAction } from '../data/types';
 import { useNorth } from '../hooks/useNorth';
 import {
@@ -14,10 +15,12 @@ export function ActionSheets({
   action,
   onClose,
   onCreatedGoal,
+  onCreatedCountry,
 }: {
   action: FabAction;
   onClose: () => void;
   onCreatedGoal?: (id: string) => void;
+  onCreatedCountry?: () => void;
 }) {
   return (
     <>
@@ -27,6 +30,11 @@ export function ActionSheets({
         onCreated={onCreatedGoal}
       />
       <BrainSheet open={action === 'brain'} onClose={onClose} />
+      <CountrySheet
+        open={action === 'country'}
+        onClose={onClose}
+        onCreated={onCreatedCountry}
+      />
       <ReflectSheet open={action === 'reflect'} onClose={onClose} />
       <ReportSheet open={action === 'report'} onClose={onClose} />
       <ProjectSheet open={action === 'project'} onClose={onClose} />
@@ -221,6 +229,106 @@ function BrainSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
         )}
         <button type="submit" className="btn-primary">
           Save to vault
+        </button>
+      </form>
+    </Sheet>
+  );
+}
+
+function CountrySheet({
+  open,
+  onClose,
+  onCreated,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onCreated?: () => void;
+}) {
+  const { data, addCountry } = useNorth();
+  const available = COUNTRY_OPTIONS.filter(
+    (opt) => !data.atlas.some((c) => c.isoNumeric === opt.isoNumeric),
+  );
+  const [iso, setIso] = useState('');
+  const [visitedAt, setVisitedAt] = useState('');
+  const [trips, setTrips] = useState('1');
+  const [days, setDays] = useState('7');
+  const [cities, setCities] = useState('');
+
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    const opt = COUNTRY_OPTIONS.find((c) => c.isoNumeric === iso);
+    if (!opt) return;
+    addCountry({
+      name: opt.name,
+      flag: opt.flag,
+      isoNumeric: opt.isoNumeric,
+      continent: opt.continent,
+      visitedAt: visitedAt.trim() || 'Recently',
+      trips: Math.max(1, Number(trips) || 1),
+      days: Math.max(1, Number(days) || 1),
+      cities: cities
+        .split(',')
+        .map((c) => c.trim())
+        .filter(Boolean),
+    });
+    setIso('');
+    setVisitedAt('');
+    setTrips('1');
+    setDays('7');
+    setCities('');
+    onClose();
+    onCreated?.();
+  }
+
+  return (
+    <Sheet open={open} title="Add country" onClose={onClose}>
+      <form className="sheet-form" onSubmit={submit}>
+        <Field label="Country">
+          <select
+            value={iso}
+            onChange={(e) => setIso(e.target.value)}
+            required
+          >
+            <option value="">Select a country</option>
+            {available.map((c) => (
+              <option key={c.isoNumeric} value={c.isoNumeric}>
+                {c.flag} {c.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Visited">
+          <input
+            value={visitedAt}
+            onChange={(e) => setVisitedAt(e.target.value)}
+            placeholder="March 2027"
+          />
+        </Field>
+        <Field label="Trips">
+          <input
+            type="number"
+            min={1}
+            value={trips}
+            onChange={(e) => setTrips(e.target.value)}
+          />
+        </Field>
+        <Field label="Days">
+          <input
+            type="number"
+            min={1}
+            value={days}
+            onChange={(e) => setDays(e.target.value)}
+          />
+        </Field>
+        <Field label="Cities (comma separated)">
+          <input
+            value={cities}
+            onChange={(e) => setCities(e.target.value)}
+            placeholder="Tokyo, Kyoto"
+          />
+        </Field>
+        <button type="submit" className="btn-primary" disabled={!iso}>
+          Add to Atlas
         </button>
       </form>
     </Sheet>

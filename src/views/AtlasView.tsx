@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { WorldMap } from '../components/WorldMap';
 import { useNorth } from '../hooks/useNorth';
 
-export function AtlasView() {
+export function AtlasView({ onAdd }: { onAdd?: () => void }) {
   const { data } = useNorth();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -21,9 +21,18 @@ export function AtlasView() {
 
   return (
     <div className="page atlas-page">
-      <header className="page-head">
-        <h1>Atlas</h1>
-        <p className="page-lead">Countries you have explored.</p>
+      <header className="page-head atlas-head">
+        <div>
+          <h1>Atlas</h1>
+          <p className="page-lead">Countries you have explored.</p>
+        </div>
+        <button
+          type="button"
+          className="atlas-add-btn"
+          onClick={() => onAdd?.()}
+        >
+          + Add
+        </button>
       </header>
 
       <div className="atlas-counters">

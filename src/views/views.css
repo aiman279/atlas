@@ -433,6 +433,25 @@
   padding-bottom: 1rem;
 }
 
+.atlas-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.atlas-add-btn {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .atlas-counters {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
