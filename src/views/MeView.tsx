@@ -8,7 +8,6 @@ export function MeView() {
   return (
     <div className="page me-page">
       <header className="page-head me-head">
-        <p className="brand-mark soft">Atlas</p>
         {profile.photo ? (
           <img src={profile.photo} alt="" className="me-avatar" />
         ) : (
@@ -17,16 +16,16 @@ export function MeView() {
           </div>
         )}
         <h1>{profile.name}</h1>
-        <p className="philosophy">“{profile.philosophy}”</p>
+        <p className="philosophy">{profile.philosophy}</p>
       </header>
 
       <motion.section
         className="me-section"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.08 }}
       >
-        <p className="eyebrow">Things I value</p>
+        <p className="eyebrow">Values</p>
         <ul className="value-list">
           {profile.values.map((v) => (
             <li key={v}>{v}</li>
@@ -36,16 +35,15 @@ export function MeView() {
 
       <motion.section
         className="me-section"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.18 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.14 }}
       >
-        <p className="eyebrow">Current goals</p>
+        <p className="eyebrow">Goals</p>
         <ul className="goal-list">
           {goals.map((g) => (
             <li key={g.id} className="goal-item">
               <div className="goal-top">
-                <span aria-hidden>{g.icon}</span>
                 <h3>{g.title}</h3>
               </div>
               <p className="goal-desc">{g.description}</p>
@@ -65,9 +63,9 @@ export function MeView() {
 
       <motion.section
         className="me-section"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.26 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
       >
         <p className="eyebrow">Achievements</p>
         <ul className="achievement-list">
@@ -77,7 +75,7 @@ export function MeView() {
               <p className="moment-date">{a.date}</p>
               <p>{a.description}</p>
               {a.reflection && (
-                <p className="moment-reflection">“{a.reflection}”</p>
+                <p className="moment-reflection">{a.reflection}</p>
               )}
             </li>
           ))}

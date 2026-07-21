@@ -21,7 +21,7 @@ export function ChapterDetailView({
     return (
       <div className="page">
         <button type="button" className="back-link" onClick={onBack}>
-          ← Chapters
+          Back
         </button>
         <p>Chapter not found.</p>
       </div>
@@ -31,23 +31,23 @@ export function ChapterDetailView({
   return (
     <div className="page chapter-detail">
       <button type="button" className="back-link" onClick={onBack}>
-        ← Chapters
+        Back
       </button>
 
       <motion.div
         className="chapter-detail-hero"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.45 }}
+        transition={{ duration: 0.4 }}
       >
         <img src={chapter.coverImage} alt="" />
-        <div className="chapter-detail-veil" />
-        <div className="chapter-detail-copy">
-          <p className="eyebrow">Chapter {chapter.number}</p>
-          <h1>{chapter.title}</h1>
-          <p>{chapter.period}</p>
-        </div>
       </motion.div>
+
+      <div className="chapter-detail-copy">
+        <p className="eyebrow">Chapter {chapter.number}</p>
+        <h1>{chapter.title}</h1>
+        <p className="period">{chapter.period}</p>
+      </div>
 
       <section className="chapter-story-block">
         <p className="editorial">{chapter.story}</p>
@@ -60,14 +60,14 @@ export function ChapterDetailView({
             <motion.li
               key={m.id}
               className="moment-item"
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.05 }}
+              transition={{ delay: 0.08 + i * 0.04 }}
             >
               <p className="eyebrow">{kindLabel[m.kind]}</p>
               <h3>{m.title}</h3>
               <p className="moment-date">{m.date}</p>
-              <p className="moment-reflection">“{m.reflection}”</p>
+              <p className="moment-reflection">{m.reflection}</p>
             </motion.li>
           ))}
         </ul>

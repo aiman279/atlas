@@ -23,77 +23,70 @@ export function HomeView({
       <header className="home-brand">
         <motion.p
           className="brand-mark"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
         >
           Atlas
         </motion.p>
         <motion.p
           className="home-greeting"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.08 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
         >
           {greeting()}, {profile.name}
         </motion.p>
       </header>
 
-      <motion.section
+      <motion.button
+        type="button"
         className="home-hero"
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, delay: 0.12 }}
+        transition={{ duration: 0.45, delay: 0.08 }}
         onClick={() => chapter && onNavigate('chapter-detail', chapter.id)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && chapter)
-            onNavigate('chapter-detail', chapter.id);
-        }}
       >
-        <img
-          src={chapter?.coverImage}
-          alt=""
-          className="home-hero-img"
-        />
-        <div className="home-hero-veil" />
+        {chapter?.coverImage && (
+          <img
+            src={chapter.coverImage}
+            alt=""
+            className="home-hero-img"
+          />
+        )}
         <div className="home-hero-copy">
           <p className="eyebrow">Current chapter</p>
-          <h1>“{chapter?.title ?? 'Building My Future'}”</h1>
+          <h1>{chapter?.title ?? 'Building My Future'}</h1>
           <p className="home-hero-sub">
             {chapter?.subtitle ?? 'Creating a life I am proud of.'}
           </p>
         </div>
-      </motion.section>
+      </motion.button>
 
       <motion.section
         className="home-focus"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.28 }}
+        transition={{ delay: 0.2 }}
       >
-        <p className="eyebrow">Current focus</p>
+        <p className="eyebrow">Focus</p>
         <ul className="focus-grid">
           {profile.focusAreas.map((f) => (
-            <li key={f.id}>
-              <span aria-hidden>{f.icon}</span>
-              <span>{f.label}</span>
-            </li>
+            <li key={f.id}>{f.label}</li>
           ))}
         </ul>
       </motion.section>
 
       <motion.section
         className="home-milestone"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.36 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.28 }}
       >
-        <p className="eyebrow">Next milestone</p>
+        <p className="eyebrow">Next</p>
         <h2>{profile.nextMilestone.title}</h2>
         <p className="milestone-meta">
-          <span>{profile.nextMilestone.daysAway} days away</span>
+          {profile.nextMilestone.daysAway} days
         </p>
       </motion.section>
     </div>

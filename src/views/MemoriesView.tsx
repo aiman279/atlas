@@ -20,20 +20,17 @@ export function MemoriesView({
   return (
     <div className="page memories-page">
       <header className="page-head">
-        <p className="brand-mark soft">Atlas</p>
         <h1>Memories</h1>
-        <p className="page-lead">
-          Moments that shaped who you are becoming.
-        </p>
+        <p className="page-lead">Moments that stay with you.</p>
       </header>
 
       <ul className="memory-feed">
         {sorted.map((mem, i) => (
           <motion.li
             key={mem.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05, duration: 0.45 }}
+            transition={{ delay: i * 0.04, duration: 0.35 }}
           >
             <button
               type="button"
@@ -43,10 +40,10 @@ export function MemoriesView({
               <p className="memory-when">{formatMonth(mem.date)}</p>
               <div className="memory-media">
                 <img src={mem.image} alt="" />
-                <div className="memory-overlay">
-                  <h2>{mem.title}</h2>
-                  <p>{mem.location}</p>
-                </div>
+              </div>
+              <div className="memory-meta">
+                <h2>{mem.title}</h2>
+                <p>{mem.location}</p>
               </div>
               <p className="memory-feeling">{mem.feeling}</p>
             </button>

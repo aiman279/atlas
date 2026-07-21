@@ -25,7 +25,7 @@ export function MemoryDetailView({
     return (
       <div className="page">
         <button type="button" className="back-link" onClick={onBack}>
-          ← Memories
+          Back
         </button>
         <p>Memory not found.</p>
       </div>

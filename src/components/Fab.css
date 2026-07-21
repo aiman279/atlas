@@ -1,27 +1,27 @@
 .fab-root {
   position: fixed;
   right: max(16px, calc(50% - var(--max) / 2 + 16px));
-  bottom: calc(var(--nav-h) + var(--safe-b) + 16px);
+  bottom: calc(var(--nav-h) + var(--safe-b) + 14px);
   z-index: 50;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: 8px;
 }
 
 .fab-menu {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: min(260px, calc(100vw - 48px));
+  gap: 4px;
+  width: min(220px, calc(100vw - 48px));
 }
 
 .fab-option {
   text-align: left;
-  padding: 14px 16px;
+  padding: 12px 14px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -29,33 +29,32 @@
 
 .fab-option span {
   font-weight: 500;
-  font-size: 0.92rem;
+  font-size: 0.85rem;
 }
 
 .fab-option small {
   color: var(--ink-3);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
 }
 
 .fab-btn {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--ink);
-  color: var(--bg);
-  font-size: 1.6rem;
+  color: #fff;
+  font-size: 1.4rem;
   line-height: 1;
   display: grid;
   place-items: center;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: opacity 0.15s ease;
 }
 
 .fab-btn.is-open {
-  background: var(--accent);
-  transform: rotate(45deg);
+  opacity: 0.7;
 }
 
 .fab-btn span {
   display: block;
-  margin-top: -2px;
+  margin-top: -1px;
 }

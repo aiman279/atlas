@@ -1,11 +1,11 @@
 import type { AppView } from '../data/types';
 import './BottomNav.css';
 
-const tabs: { id: AppView; label: string; icon: string }[] = [
-  { id: 'home', label: 'Home', icon: '⌂' },
-  { id: 'chapters', label: 'Chapters', icon: '☰' },
-  { id: 'memories', label: 'Memories', icon: '◎' },
-  { id: 'me', label: 'Me', icon: '○' },
+const tabs: { id: AppView; label: string }[] = [
+  { id: 'home', label: 'Home' },
+  { id: 'chapters', label: 'Chapters' },
+  { id: 'memories', label: 'Memories' },
+  { id: 'me', label: 'Me' },
 ];
 
 export function BottomNav({
@@ -32,10 +32,7 @@ export function BottomNav({
           onClick={() => onNavigate(tab.id)}
           aria-current={active === tab.id ? 'page' : undefined}
         >
-          <span className="nav-icon" aria-hidden>
-            {tab.icon}
-          </span>
-          <span className="nav-label">{tab.label}</span>
+          {tab.label}
         </button>
       ))}
     </nav>

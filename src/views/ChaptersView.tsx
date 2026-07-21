@@ -12,20 +12,17 @@ export function ChaptersView({
   return (
     <div className="page chapters-page">
       <header className="page-head">
-        <p className="brand-mark soft">Atlas</p>
         <h1>Chapters</h1>
-        <p className="page-lead">
-          Periods of your life, told like a book.
-        </p>
+        <p className="page-lead">Periods of your life.</p>
       </header>
 
       <ul className="chapter-list">
         {sorted.map((ch, i) => (
           <motion.li
             key={ch.id}
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.06, duration: 0.4 }}
+            transition={{ delay: i * 0.05, duration: 0.35 }}
           >
             <button
               type="button"
