@@ -159,13 +159,20 @@ export function WorldView({
       <ul className="country-list">
         {list.map((c) => (
           <li key={c.id}>
-            <button type="button" onClick={() => onOpenCountry(c.id)}>
-              <span>
-                {c.flag} {c.country}
-              </span>
-              <span className="muted">
-                {c.kind === 'dream' ? c.dream : c.cities[0]}
-              </span>
+            <button
+              type="button"
+              className="country-row"
+              onClick={() => onOpenCountry(c.id)}
+            >
+              <img src={c.coverImage} alt="" />
+              <div>
+                <strong>
+                  {c.flag} {c.country}
+                </strong>
+                <p className="muted">
+                  {c.kind === 'dream' ? c.dream : c.cities.join(' · ')}
+                </p>
+              </div>
             </button>
           </li>
         ))}

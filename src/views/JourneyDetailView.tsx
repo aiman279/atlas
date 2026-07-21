@@ -28,66 +28,66 @@ export function JourneyDetailView({
       className="page story"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.45 }}
+      transition={{ duration: 0.35 }}
     >
-      <button type="button" className="back" onClick={onBack}>
-        ← Journeys
+      <button type="button" className="back overlay-back" onClick={onBack}>
+        ← Back
       </button>
 
-      <div
-        className="hero-image"
-        style={{ backgroundImage: `url(${journey.coverImage})` }}
-      />
+      <div className="story-hero">
+        <img src={journey.coverImage} alt="" />
+        <div className="story-hero-text">
+          <h1>
+            {journey.flag} {journey.country}
+          </h1>
+          <p>
+            {formatMonthYear(journey.startDate)} · {journey.durationDays} days
+          </p>
+        </div>
+      </div>
 
-      <header className="story-header">
-        <h1>
-          {journey.flag} {journey.country}
-        </h1>
-        <p className="block-meta">{formatMonthYear(journey.startDate)}</p>
-        <p className="block-meta">{journey.durationDays} days</p>
-      </header>
-
-      <hr className="rule" />
-
-      <section>
-        <p className="label">Places visited</p>
-        <p className="places">{journey.placesVisited.join(' · ')}</p>
-      </section>
-
-      {journey.photos.length > 0 && (
-        <>
-          <hr className="rule" />
-          <section className="memory-gallery">
-            <p className="label">Photo memories</p>
-            {journey.photos.map((photo) => (
-              <figure key={photo.id} className="memory-figure">
-                <img src={photo.url} alt={photo.caption} loading="lazy" />
-                <figcaption>
-                  <span>{photo.location}</span>
-                  <span>{formatMonthYear(photo.date)}</span>
-                  <p>“{photo.caption}”</p>
-                </figcaption>
-              </figure>
+      <div className="story-body">
+        <section className="story-block">
+          <p className="label">Places</p>
+          <div className="place-chips">
+            {journey.placesVisited.map((p) => (
+              <span key={p}>{p}</span>
             ))}
+          </div>
+        </section>
+
+        {journey.photos.length > 0 && (
+          <section className="story-block">
+            <p className="label">Memories</p>
+            <div className="photo-stack">
+              {journey.photos.map((photo) => (
+                <figure key={photo.id} className="photo-card">
+                  <img src={photo.url} alt={photo.caption} loading="lazy" />
+                  <figcaption>
+                    <strong>{photo.location}</strong>
+                    <span>{formatMonthYear(photo.date)}</span>
+                    <p>{photo.caption}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
           </section>
-        </>
-      )}
-
-      <hr className="rule" />
-
-      <section className="reflection">
-        <p className="label">Reflection</p>
-        {journey.reflection.split('\n\n').map((para) => (
-          <p key={para} className="reflection-text">
-            {para}
-          </p>
-        ))}
-        {journey.rating > 0 && (
-          <p className="rating" aria-label={`${journey.rating} stars`}>
-            {'★'.repeat(journey.rating)}
-          </p>
         )}
-      </section>
+
+        <section className="story-block">
+          <p className="label">Reflection</p>
+          {journey.reflection.split('\n\n').map((para) => (
+            <p key={para} className="reflection-text">
+              {para}
+            </p>
+          ))}
+          {journey.rating > 0 && (
+            <p className="rating" aria-label={`${journey.rating} stars`}>
+              {'★'.repeat(journey.rating)}
+            </p>
+          )}
+        </section>
+      </div>
     </motion.article>
   );
 }

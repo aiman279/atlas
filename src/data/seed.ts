@@ -9,6 +9,8 @@ export const seedData: WaypointData = {
     countriesVisited: 8,
     totalJourneys: 12,
     travelDays: 67,
+    lifeChapter: 'Finding independence',
+    chapterNote: 'Exploring the world and learning about myself.',
   },
   fund: {
     goalName: 'Japan',

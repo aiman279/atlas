@@ -67,6 +67,8 @@ export interface Profile {
   countriesVisited: number;
   totalJourneys: number;
   travelDays: number;
+  lifeChapter: string;
+  chapterNote: string;
 }
 
 export interface WaypointData {

@@ -1,20 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg: #f7f6f3;
+  --bg: #f2f2f4;
   --surface: #ffffff;
-  --ink: #111111;
-  --ink-2: #3d3d3d;
-  --ink-3: #8a8a8a;
-  --line: rgba(17, 17, 17, 0.08);
-  --accent: #2f5d50;
-  --shadow: 0 1px 2px rgba(17, 17, 17, 0.04), 0 8px 24px rgba(17, 17, 17, 0.04);
-  --radius: 16px;
-  --font: 'Manrope', system-ui, sans-serif;
-  --display: 'Instrument Serif', Georgia, serif;
-  --nav-h: 64px;
+  --ink: #0f0f10;
+  --ink-2: #3a3a3c;
+  --ink-3: #8e8e93;
+  --line: rgba(15, 15, 16, 0.08);
+  --accent: #0a7a62;
+  --accent-soft: rgba(10, 122, 98, 0.1);
+  --shadow: 0 4px 20px rgba(15, 15, 16, 0.06);
+  --radius: 18px;
+  --radius-sm: 14px;
+  --font: 'Manrope', system-ui, -apple-system, sans-serif;
+  --nav-h: 68px;
   --safe-b: env(safe-area-inset-bottom, 0px);
-  --max: 480px;
+  --max: 430px;
 }
 
 *,
@@ -33,7 +34,7 @@ body {
   font-family: var(--font);
   color: var(--ink);
   background: var(--bg);
-  line-height: 1.5;
+  line-height: 1.45;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
@@ -59,10 +60,10 @@ button {
 h1,
 h2,
 h3 {
-  font-family: var(--display);
-  font-weight: 400;
-  letter-spacing: -0.025em;
-  line-height: 1.12;
+  font-family: var(--font);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
   margin: 0;
 }
 
@@ -80,38 +81,42 @@ ul {
   min-height: 100dvh;
   max-width: var(--max);
   margin: 0 auto;
-  padding-bottom: calc(var(--nav-h) + var(--safe-b) + 1.5rem);
+  background: var(--bg);
+  padding-bottom: calc(var(--nav-h) + var(--safe-b) + 0.75rem);
+  box-shadow: 0 0 0 1px var(--line);
 }
 
 @media (min-width: 768px) {
   :root {
-    --max: 640px;
+    --max: 480px;
   }
 }
 
 .app-main {
-  padding: 1.75rem 1.4rem 0;
-}
-
-.rule {
-  border: none;
-  border-top: 1px solid var(--line);
-  margin: 1.75rem 0;
+  padding: 1.1rem 1.1rem 0;
 }
 
 .muted {
   color: var(--ink-3);
-  font-size: 0.9rem;
-  font-weight: 400;
+  font-size: 0.86rem;
 }
 
 .back {
   color: var(--ink-2);
   font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.85rem;
 }
 
-.back:hover {
+.back.overlay-back {
+  position: absolute;
+  top: 0.85rem;
+  left: 1rem;
+  z-index: 5;
+  margin: 0;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
   color: var(--ink);
 }

@@ -7,41 +7,54 @@ export function ProfileView() {
   return (
     <motion.div
       className="page"
-      initial={{ opacity: 0, y: 6 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <h1 className="page-title">{profile.name}</h1>
-      <p className="page-lead">{profile.role}</p>
+      <div className="profile-hero">
+        <div className="home-avatar lg">{profile.name.charAt(0)}</div>
+        <h1 className="page-title">{profile.name}</h1>
+        <p className="page-lead">{profile.role}</p>
+      </div>
 
-      <hr className="rule" />
-
-      <section>
-        <p className="label">Travel style</p>
-        <p className="profile-value">{profile.travelStyle}</p>
+      <section className="chapter-chip mb">
+        <p className="chip-label">Current chapter</p>
+        <p className="chip-title">{profile.lifeChapter}</p>
+        <p className="chip-note">{profile.chapterNote}</p>
       </section>
 
-      <hr className="rule" />
+      <div className="profile-grid">
+        <div className="fund-card">
+          <p className="label">Travel style</p>
+          <p className="profile-value">{profile.travelStyle}</p>
+        </div>
+        <div className="fund-card">
+          <p className="label">Preferences</p>
+          <div className="place-chips">
+            {profile.preferences.map((p) => (
+              <span key={p}>{p}</span>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <section>
-        <p className="label">Preferences</p>
-        <p className="profile-value">{profile.preferences.join(' · ')}</p>
-      </section>
-
-      <hr className="rule" />
-
-      <section>
-        <p className="label">Statistics</p>
-        <ul className="stat-lines">
-          <li>
-            <span>{profile.countriesVisited}</span> countries
-          </li>
-          <li>
-            <span>{profile.totalJourneys}</span> journeys
-          </li>
-          <li>
-            <span>{profile.travelDays}</span> travel days
-          </li>
-        </ul>
+      <section className="home-section">
+        <div className="section-head">
+          <h2>Statistics</h2>
+        </div>
+        <div className="stat-cards">
+          <div className="stat-card">
+            <p className="stat-num">{profile.countriesVisited}</p>
+            <p className="stat-lbl">Countries</p>
+          </div>
+          <div className="stat-card">
+            <p className="stat-num">{profile.totalJourneys}</p>
+            <p className="stat-lbl">Journeys</p>
+          </div>
+          <div className="stat-card">
+            <p className="stat-num">{profile.travelDays}</p>
+            <p className="stat-lbl">Days</p>
+          </div>
+        </div>
       </section>
     </motion.div>
   );

@@ -16,59 +16,131 @@ export function HomeView({
   const data = useWaypoint();
   const next = nextJourney(data);
   const days = Math.max(0, daysUntil(next.startDate));
+  const fundPct = Math.min(
+    100,
+    Math.round((data.fund.saved / data.fund.target) * 100),
+  );
+  const recent = data.journeys
+    .filter((j) => j.status === 'completed' && j.coverImage)
+    .slice(0, 3);
 
   return (
     <motion.div
-      className="page"
-      initial={{ opacity: 0, y: 6 }}
+      className="page home"
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.35 }}
     >
-      <p className="wordmark">Waypoint</p>
-      <h1 className="greet">
-        {greeting()}, {data.profile.name}
-      </h1>
+      <header className="home-header">
+        <div>
+          <p className="home-hello">{greeting()}</p>
+          <h1 className="home-name">{data.profile.name}</h1>
+        </div>
+        <button
+          type="button"
+          className="home-avatar"
+          onClick={() => onNavigate('profile')}
+          aria-label="Open profile"
+        >
+          {data.profile.name.charAt(0)}
+        </button>
+      </header>
 
-      <hr className="rule" />
+      <section className="chapter-chip">
+        <p className="chip-label">Current chapter</p>
+        <p className="chip-title">{data.profile.lifeChapter}</p>
+        <p className="chip-note">{data.profile.chapterNote}</p>
+      </section>
 
-      <button
-        type="button"
-        className="block-link"
-        onClick={() => onNavigate('journey-detail', next.id)}
-      >
-        <p className="label">Next Journey</p>
-        <h2 className="block-title">{next.country}</h2>
-        <p className="block-meta">{days} days away</p>
-      </button>
+      <section className="home-section">
+        <div className="section-head">
+          <h2>Next adventure</h2>
+          <span>{days} days</span>
+        </div>
+        <button
+          type="button"
+          className="adventure-card"
+          onClick={() => onNavigate('journey-detail', next.id)}
+        >
+          <img src={next.coverImage} alt="" className="adventure-img" />
+          <div className="adventure-veil">
+            <p className="adventure-flag">{next.flag}</p>
+            <h3>{next.country}</h3>
+            <p>
+              {next.cities.join(' · ')} · {next.durationDays} days
+            </p>
+          </div>
+        </button>
+      </section>
 
-      <hr className="rule" />
+      <section className="home-section">
+        <div className="section-head">
+          <h2>Travel fund</h2>
+          <span>{fundPct}%</span>
+        </div>
+        <div className="fund-card">
+          <div className="fund-top">
+            <div>
+              <p className="fund-label">{data.fund.goalName}</p>
+              <p className="fund-saved">
+                {formatMoney(data.fund.saved, data.fund.currency)}
+              </p>
+            </div>
+            <p className="fund-target">
+              of {formatMoney(data.fund.target, data.fund.currency)}
+            </p>
+          </div>
+          <div className="fund-bar">
+            <span style={{ width: `${fundPct}%` }} />
+          </div>
+        </div>
+      </section>
 
-      <div>
-        <p className="label">Travel Fund</p>
-        <p className="fund-amount">
-          {formatMoney(data.fund.saved, data.fund.currency)}
-        </p>
-        <p className="block-meta">
-          of {formatMoney(data.fund.target, data.fund.currency)}
-        </p>
-      </div>
+      <section className="home-section">
+        <div className="section-head">
+          <h2>Your journey</h2>
+        </div>
+        <div className="stat-cards">
+          <div className="stat-card">
+            <p className="stat-num">{data.profile.countriesVisited}</p>
+            <p className="stat-lbl">Countries</p>
+          </div>
+          <div className="stat-card">
+            <p className="stat-num">{data.profile.totalJourneys}</p>
+            <p className="stat-lbl">Journeys</p>
+          </div>
+          <div className="stat-card">
+            <p className="stat-num">{data.profile.travelDays}</p>
+            <p className="stat-lbl">Days</p>
+          </div>
+        </div>
+      </section>
 
-      <hr className="rule" />
-
-      <div>
-        <p className="label">My Journey</p>
-        <ul className="stat-lines">
-          <li>
-            <span>{data.profile.countriesVisited}</span> countries
-          </li>
-          <li>
-            <span>{data.profile.totalJourneys}</span> journeys
-          </li>
-          <li>
-            <span>{data.profile.travelDays}</span> days
-          </li>
-        </ul>
-      </div>
+      {recent.length > 0 && (
+        <section className="home-section">
+          <div className="section-head">
+            <h2>Memories</h2>
+            <button type="button" onClick={() => onNavigate('journeys')}>
+              See all
+            </button>
+          </div>
+          <div className="memory-row">
+            {recent.map((j) => (
+              <button
+                key={j.id}
+                type="button"
+                className="memory-thumb"
+                onClick={() => onNavigate('journey-detail', j.id)}
+              >
+                <img src={j.coverImage} alt="" />
+                <span>
+                  {j.flag} {j.country}
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
     </motion.div>
   );
 }

@@ -1,7 +1,7 @@
 import { seedData } from './seed';
 import type { Journey, WaypointData } from './types';
 
-const STORAGE_KEY = 'waypoint-archive-v1';
+const STORAGE_KEY = 'waypoint-archive-v2';
 
 export function loadData(): WaypointData {
   try {

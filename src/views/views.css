@@ -1,220 +1,504 @@
 .page {
-  min-height: 60vh;
-}
-
-.wordmark {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 1.25rem;
-}
-
-.greet {
-  font-size: clamp(2rem, 7vw, 2.5rem);
-  max-width: 12ch;
+  position: relative;
+  padding-bottom: 0.5rem;
 }
 
 .page-title {
-  font-size: clamp(2rem, 6vw, 2.4rem);
-  margin-bottom: 0.35rem;
+  font-size: 1.75rem;
+  margin-bottom: 0.2rem;
 }
 
 .page-lead {
   color: var(--ink-3);
-  font-size: 1rem;
-  margin-bottom: 1.75rem;
+  font-size: 0.92rem;
+  margin-bottom: 1.15rem;
+  font-weight: 500;
 }
 
 .label {
   font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 650;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-3);
   margin-bottom: 0.55rem;
 }
 
-.block-link {
-  display: block;
-  width: 100%;
-  text-align: left;
-}
-
-.block-title {
-  font-size: 2rem;
-  margin: 0.15rem 0 0.35rem;
-}
-
-.block-meta {
-  color: var(--ink-3);
-  font-size: 0.95rem;
-}
-
-.fund-amount {
-  font-family: var(--display);
-  font-size: 2.2rem;
-  letter-spacing: -0.03em;
-  margin: 0.1rem 0 0.2rem;
-}
-
-.stat-lines {
+/* —— Home —— */
+.home-header {
   display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  color: var(--ink-2);
-  font-size: 1.05rem;
-}
-
-.stat-lines span {
-  font-family: var(--display);
-  font-size: 1.35rem;
-  color: var(--ink);
-  margin-right: 0.35rem;
-}
-
-.rule.soft {
-  margin: 1.1rem 0;
-}
-
-.year-block + .year-block {
-  margin-top: 2rem;
-}
-
-.year {
-  font-family: var(--font);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--accent);
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
 }
 
-.timeline-item {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.15rem 0;
+.home-hello {
+  font-size: 0.9rem;
+  color: var(--ink-3);
+  font-weight: 500;
 }
 
-.timeline-item h3 {
+.home-name {
   font-size: 1.55rem;
-  margin-bottom: 0.3rem;
+  margin-top: 0.1rem;
 }
 
-.hero-image {
-  width: calc(100% + 2.8rem);
-  margin-left: -1.4rem;
-  height: 42vh;
-  min-height: 220px;
-  max-height: 360px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 0;
-  margin-bottom: 1.5rem;
+.home-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
-.hero-image.tall {
-  height: 48vh;
-  max-height: 420px;
+.home-avatar.lg {
+  width: 4rem;
+  height: 4rem;
+  font-size: 1.4rem;
+  margin: 0 auto 0.75rem;
 }
 
-.story-header h1 {
-  font-size: clamp(2rem, 7vw, 2.6rem);
-  margin-bottom: 0.45rem;
+.chapter-chip {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.95rem 1rem;
+  margin-bottom: 1.15rem;
+  box-shadow: var(--shadow);
 }
 
-.places {
+.chapter-chip.mb {
+  margin-bottom: 0.85rem;
+}
+
+.chip-label {
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+
+.chip-title {
   font-size: 1.15rem;
-  color: var(--ink-2);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.2rem;
 }
 
-.memory-gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-}
-
-.memory-figure img {
-  width: calc(100% + 2.8rem);
-  margin-left: -1.4rem;
-  max-width: none;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-
-.memory-figure figcaption {
-  margin-top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.memory-figure figcaption span {
-  font-size: 0.8rem;
+.chip-note {
+  font-size: 0.88rem;
   color: var(--ink-3);
 }
 
-.memory-figure figcaption p {
-  font-family: var(--display);
-  font-style: italic;
-  font-size: 1.15rem;
-  color: var(--ink-2);
-  margin-top: 0.25rem;
-}
-
-.reflection-text {
-  font-family: var(--display);
-  font-size: 1.35rem;
-  line-height: 1.45;
-  color: var(--ink-2);
-  margin-bottom: 0.75rem;
-}
-
-.rating {
-  letter-spacing: 0.12em;
-  color: var(--ink);
-  margin-top: 0.5rem;
-}
-
-.mode-toggle {
-  display: flex;
-  gap: 1.25rem;
+.home-section {
   margin-bottom: 1.25rem;
 }
 
-.mode-toggle button {
-  font-size: 0.95rem;
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.65rem;
+}
+
+.section-head h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.section-head span,
+.section-head button {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.adventure-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-radius: calc(var(--radius) + 4px);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  max-height: 340px;
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+
+.adventure-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 0.5s ease;
+}
+
+.adventure-card:hover .adventure-img {
+  transform: scale(1.06);
+}
+
+.adventure-veil {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.15rem 1.1rem 1.2rem;
+  background: linear-gradient(
+    180deg,
+    transparent 35%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+  color: #fff;
+}
+
+.adventure-flag {
+  font-size: 1.35rem;
+  margin-bottom: 0.2rem;
+}
+
+.adventure-veil h3 {
+  font-size: 1.75rem;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.adventure-veil p {
+  font-size: 0.9rem;
+  opacity: 0.88;
   font-weight: 500;
+}
+
+.fund-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.05rem;
+  box-shadow: var(--shadow);
+}
+
+.fund-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.fund-label {
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--ink-3);
-  padding-bottom: 0.25rem;
-  border-bottom: 1px solid transparent;
+  margin-bottom: 0.15rem;
 }
 
-.mode-toggle button.is-on {
-  color: var(--ink);
-  border-bottom-color: var(--ink);
+.fund-saved {
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
-.map-wrap {
-  background: #ebe8e2;
+.fund-target {
+  font-size: 0.85rem;
+  color: var(--ink-3);
+  font-weight: 500;
+  padding-bottom: 0.2rem;
+}
+
+.fund-bar {
+  height: 7px;
+  border-radius: 999px;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.fund-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), #14a085);
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 0.65rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.stat-num {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.stat-lbl {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.memory-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.memory-thumb {
+  display: block;
+  text-align: left;
+}
+
+.memory-thumb img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 0.4rem;
+}
+
+.memory-thumb span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* —— Journeys —— */
+.year-block + .year-block {
+  margin-top: 1.35rem;
+}
+
+.year {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 0.65rem;
+}
+
+.journey-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.journey-row {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.55rem;
+  box-shadow: var(--shadow);
+}
+
+.journey-thumb {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.journey-meta h3 {
+  font-size: 1rem;
+  margin-bottom: 0.15rem;
+}
+
+.journey-meta p {
+  font-size: 0.82rem;
+  color: var(--ink-3);
+}
+
+.journey-days {
+  margin-top: 0.15rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-2) !important;
+}
+
+/* —— Story / detail —— */
+.story {
+  margin: -1.1rem -1.1rem 0;
+  padding: 0;
+}
+
+.story-hero {
+  position: relative;
+  height: min(52vh, 380px);
+  overflow: hidden;
+}
+
+.story-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-hero-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 3.5rem 1.15rem 1.25rem;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7));
+  color: #fff;
+}
+
+.story-hero-text h1 {
+  font-size: 1.85rem;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.story-hero-text p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.story-body {
+  padding: 1.15rem 1.1rem 1.5rem;
+}
+
+.story-block {
+  margin-bottom: 1.25rem;
+}
+
+.place-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.place-chips span {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.photo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.photo-card {
+  margin: 0;
+  background: var(--surface);
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--line);
-  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.photo-card figcaption {
+  padding: 0.75rem 0.9rem 0.9rem;
+}
+
+.photo-card strong {
+  display: block;
+  font-size: 0.92rem;
+  margin-bottom: 0.1rem;
+}
+
+.photo-card span {
+  font-size: 0.78rem;
+  color: var(--ink-3);
+}
+
+.photo-card p {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+.reflection-text {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  font-weight: 500;
+  margin-bottom: 0.55rem;
+}
+
+.rating {
+  letter-spacing: 0.1em;
+  color: #f5a524;
+  margin-top: 0.35rem;
+}
+
+/* —— World —— */
+.mode-toggle {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  background: rgba(15, 15, 16, 0.05);
+  border-radius: 12px;
+  margin-bottom: 0.9rem;
+}
+
+.mode-toggle button {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--ink-3);
+  padding: 0.55rem;
+  border-radius: 10px;
+}
+
+.mode-toggle button.is-on {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.map-wrap {
+  background: #e4e9e7;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
 }
 
 .map-svg {
   width: 100%;
   height: auto;
   display: block;
-  padding: 0.5rem 0.25rem;
+  padding: 0.4rem 0.2rem;
 }
 
 .map-path {
-  fill: #c9c4ba;
-  stroke: rgba(247, 246, 243, 0.7);
+  fill: #b7c2bd;
+  stroke: rgba(242, 242, 244, 0.7);
   stroke-width: 0.35;
   transition: fill 0.2s ease;
 }
@@ -225,7 +509,7 @@
 }
 
 .map-path.is-dream {
-  fill: #9a958c;
+  fill: #8b908c;
   cursor: pointer;
 }
 
@@ -237,27 +521,51 @@
 .country-list {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
-.country-list li + li {
-  border-top: 1px solid var(--line);
-}
-
-.country-list button {
-  width: 100%;
+.country-row {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 0;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
   text-align: left;
-  font-size: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem;
+  box-shadow: var(--shadow);
 }
 
-.country-list button span:first-child {
-  font-weight: 500;
+.country-row img {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.country-row strong {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 0.1rem;
+}
+
+/* —— Profile —— */
+.profile-hero {
+  text-align: center;
+  margin-bottom: 1.15rem;
+}
+
+.profile-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1.15rem;
 }
 
 .profile-value {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 650;
   color: var(--ink-2);
 }
