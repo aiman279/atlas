@@ -28,11 +28,17 @@ function NorthApp() {
   const [goalId, setGoalId] = useState<string | null>(null);
   const [fabOpen, setFabOpen] = useState(false);
   const [action, setAction] = useState<FabAction>(null);
+  const [editCountryId, setEditCountryId] = useState<string | null>(null);
 
   function navigate(next: AppView, id?: string) {
     if (next === 'goal-detail' && id) setGoalId(id);
     setView(next);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function closeSheets() {
+    setAction(null);
+    setEditCountryId(null);
   }
 
   const key = view === 'goal-detail' ? `g-${goalId}` : view;
@@ -61,7 +67,16 @@ function NorthApp() {
             )}
             {view === 'brain' && <BrainView />}
             {view === 'atlas' && (
-              <AtlasView onAdd={() => setAction('country')} />
+              <AtlasView
+                onAdd={() => {
+                  setEditCountryId(null);
+                  setAction('country');
+                }}
+                onEdit={(id) => {
+                  setEditCountryId(id);
+                  setAction('country');
+                }}
+              />
             )}
             {view === 'evolution' && <EvolutionView />}
             {view === 'identity' && <IdentityView />}
@@ -74,13 +89,15 @@ function NorthApp() {
         onToggle={() => setFabOpen((v) => !v)}
         onSelect={(a) => {
           setFabOpen(false);
+          setEditCountryId(null);
           setAction(a);
         }}
       />
 
       <ActionSheets
         action={action}
-        onClose={() => setAction(null)}
+        editCountryId={editCountryId}
+        onClose={closeSheets}
         onCreatedGoal={(id) => navigate('goal-detail', id)}
         onCreatedCountry={() => navigate('atlas')}
       />

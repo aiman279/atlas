@@ -24,6 +24,8 @@ interface NorthContextValue {
   updateGoal: (id: string, patch: Partial<GoalMission>) => void;
   addBrain: (input: Omit<BrainItem, 'id'>) => string;
   addCountry: (input: Omit<VisitedCountry, 'id'>) => string;
+  updateCountry: (id: string, patch: Partial<VisitedCountry>) => void;
+  removeCountry: (id: string) => void;
   updateProfile: (patch: Partial<IdentityProfile>) => void;
   updateLifeAreas: (areas: LifeArea[]) => void;
   updateToday: (patch: Partial<TodayPulse>) => void;
@@ -101,6 +103,18 @@ export function NorthProvider({ children }: { children: ReactNode }) {
         };
       });
       return id;
+    },
+    updateCountry(id, patch) {
+      set((prev) => ({
+        ...prev,
+        atlas: prev.atlas.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+      }));
+    },
+    removeCountry(id) {
+      set((prev) => ({
+        ...prev,
+        atlas: prev.atlas.filter((c) => c.id !== id),
+      }));
     },
     updateProfile(patch) {
       set((prev) => ({

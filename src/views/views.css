@@ -524,6 +524,40 @@
   color: var(--ink);
 }
 
+.atlas-popup-cities {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+.atlas-popup-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.atlas-action-edit,
+.atlas-action-delete {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.atlas-action-edit {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.atlas-action-delete {
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+
 .atlas-legend {
   display: flex;
   flex-wrap: wrap;

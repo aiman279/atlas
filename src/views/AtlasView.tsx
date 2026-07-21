@@ -3,8 +3,14 @@ import { useMemo, useState } from 'react';
 import { WorldMap } from '../components/WorldMap';
 import { useNorth } from '../hooks/useNorth';
 
-export function AtlasView({ onAdd }: { onAdd?: () => void }) {
-  const { data } = useNorth();
+export function AtlasView({
+  onAdd,
+  onEdit,
+}: {
+  onAdd?: () => void;
+  onEdit?: (id: string) => void;
+}) {
+  const { data, removeCountry } = useNorth();
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const selected = data.atlas.find((c) => c.id === selectedId) ?? null;
@@ -18,6 +24,16 @@ export function AtlasView({ onAdd }: { onAdd?: () => void }) {
       cities,
     };
   }, [data.atlas]);
+
+  function handleDelete() {
+    if (!selected) return;
+    const ok = window.confirm(
+      `Remove ${selected.name} from your Atlas?`,
+    );
+    if (!ok) return;
+    removeCountry(selected.id);
+    setSelectedId(null);
+  }
 
   return (
     <div className="page atlas-page">
@@ -91,6 +107,27 @@ export function AtlasView({ onAdd }: { onAdd?: () => void }) {
                   <dd>{selected.days}</dd>
                 </div>
               </dl>
+              {selected.cities.length > 0 && (
+                <p className="atlas-popup-cities">
+                  {selected.cities.join(' · ')}
+                </p>
+              )}
+              <div className="atlas-popup-actions">
+                <button
+                  type="button"
+                  className="atlas-action-edit"
+                  onClick={() => onEdit?.(selected.id)}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="atlas-action-delete"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

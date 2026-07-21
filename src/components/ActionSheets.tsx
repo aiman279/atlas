@@ -1,6 +1,6 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { COUNTRY_OPTIONS } from '../data/countries';
-import type { BrainCategory, FabAction } from '../data/types';
+import type { BrainCategory, FabAction, VisitedCountry } from '../data/types';
 import { useNorth } from '../hooks/useNorth';
 import {
   categorizeBrain,
@@ -11,17 +11,43 @@ import {
 import { uid } from '../lib/images';
 import { Sheet } from './Sheet';
 
+function formatVisited(isoDate: string) {
+  const d = new Date(`${isoDate}T12:00:00`);
+  if (Number.isNaN(d.getTime())) return isoDate || 'Recently';
+  return d.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function toDateInput(label: string) {
+  const d = new Date(label);
+  if (Number.isNaN(d.getTime())) return new Date().toISOString().slice(0, 10);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
 export function ActionSheets({
   action,
   onClose,
   onCreatedGoal,
   onCreatedCountry,
+  editCountryId = null,
 }: {
   action: FabAction;
   onClose: () => void;
   onCreatedGoal?: (id: string) => void;
   onCreatedCountry?: () => void;
+  editCountryId?: string | null;
 }) {
+  const { data } = useNorth();
+  const editing = editCountryId
+    ? (data.atlas.find((c) => c.id === editCountryId) ?? null)
+    : null;
+
   return (
     <>
       <GoalSheet
@@ -34,6 +60,7 @@ export function ActionSheets({
         open={action === 'country'}
         onClose={onClose}
         onCreated={onCreatedCountry}
+        editing={editing}
       />
       <ReflectSheet open={action === 'reflect'} onClose={onClose} />
       <ReportSheet open={action === 'report'} onClose={onClose} />
@@ -239,14 +266,19 @@ function CountrySheet({
   open,
   onClose,
   onCreated,
+  editing,
 }: {
   open: boolean;
   onClose: () => void;
   onCreated?: () => void;
+  editing: VisitedCountry | null;
 }) {
-  const { data, addCountry } = useNorth();
+  const { data, addCountry, updateCountry } = useNorth();
+  const isEdit = Boolean(editing);
   const available = COUNTRY_OPTIONS.filter(
-    (opt) => !data.atlas.some((c) => c.isoNumeric === opt.isoNumeric),
+    (opt) =>
+      !data.atlas.some((c) => c.isoNumeric === opt.isoNumeric) ||
+      (editing && editing.isoNumeric === opt.isoNumeric),
   );
   const [iso, setIso] = useState('');
   const [visitedAt, setVisitedAt] = useState(
@@ -256,21 +288,28 @@ function CountrySheet({
   const [days, setDays] = useState('7');
   const [cities, setCities] = useState('');
 
-  function formatVisited(isoDate: string) {
-    const d = new Date(`${isoDate}T12:00:00`);
-    if (Number.isNaN(d.getTime())) return isoDate || 'Recently';
-    return d.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  }
+  useEffect(() => {
+    if (!open) return;
+    if (editing) {
+      setIso(editing.isoNumeric);
+      setVisitedAt(toDateInput(editing.visitedAt));
+      setTrips(String(editing.trips));
+      setDays(String(editing.days));
+      setCities(editing.cities.join(', '));
+    } else {
+      setIso('');
+      setVisitedAt(new Date().toISOString().slice(0, 10));
+      setTrips('1');
+      setDays('7');
+      setCities('');
+    }
+  }, [open, editing]);
 
   function submit(e: FormEvent) {
     e.preventDefault();
     const opt = COUNTRY_OPTIONS.find((c) => c.isoNumeric === iso);
     if (!opt) return;
-    addCountry({
+    const payload = {
       name: opt.name,
       flag: opt.flag,
       isoNumeric: opt.isoNumeric,
@@ -282,32 +321,43 @@ function CountrySheet({
         .split(',')
         .map((c) => c.trim())
         .filter(Boolean),
-    });
-    setIso('');
-    setVisitedAt(new Date().toISOString().slice(0, 10));
-    setTrips('1');
-    setDays('7');
-    setCities('');
+    };
+    if (editing) {
+      updateCountry(editing.id, payload);
+    } else {
+      addCountry(payload);
+    }
     onClose();
     onCreated?.();
   }
 
   return (
-    <Sheet open={open} title="Add country" onClose={onClose}>
+    <Sheet
+      open={open}
+      title={isEdit ? 'Edit country' : 'Add country'}
+      onClose={onClose}
+    >
       <form className="sheet-form" onSubmit={submit}>
         <Field label="Country">
-          <select
-            value={iso}
-            onChange={(e) => setIso(e.target.value)}
-            required
-          >
-            <option value="">Select a country</option>
-            {available.map((c) => (
-              <option key={c.isoNumeric} value={c.isoNumeric}>
-                {c.flag} {c.name}
-              </option>
-            ))}
-          </select>
+          {isEdit ? (
+            <input
+              value={`${editing?.flag ?? ''} ${editing?.name ?? ''}`}
+              disabled
+            />
+          ) : (
+            <select
+              value={iso}
+              onChange={(e) => setIso(e.target.value)}
+              required
+            >
+              <option value="">Select a country</option>
+              {available.map((c) => (
+                <option key={c.isoNumeric} value={c.isoNumeric}>
+                  {c.flag} {c.name}
+                </option>
+              ))}
+            </select>
+          )}
         </Field>
         <Field label="Visited">
           <input
@@ -342,7 +392,7 @@ function CountrySheet({
           />
         </Field>
         <button type="submit" className="btn-primary" disabled={!iso}>
-          Add to Atlas
+          {isEdit ? 'Save changes' : 'Add to Atlas'}
         </button>
       </form>
     </Sheet>
