@@ -249,10 +249,22 @@ function CountrySheet({
     (opt) => !data.atlas.some((c) => c.isoNumeric === opt.isoNumeric),
   );
   const [iso, setIso] = useState('');
-  const [visitedAt, setVisitedAt] = useState('');
+  const [visitedAt, setVisitedAt] = useState(
+    () => new Date().toISOString().slice(0, 10),
+  );
   const [trips, setTrips] = useState('1');
   const [days, setDays] = useState('7');
   const [cities, setCities] = useState('');
+
+  function formatVisited(isoDate: string) {
+    const d = new Date(`${isoDate}T12:00:00`);
+    if (Number.isNaN(d.getTime())) return isoDate || 'Recently';
+    return d.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  }
 
   function submit(e: FormEvent) {
     e.preventDefault();
@@ -263,7 +275,7 @@ function CountrySheet({
       flag: opt.flag,
       isoNumeric: opt.isoNumeric,
       continent: opt.continent,
-      visitedAt: visitedAt.trim() || 'Recently',
+      visitedAt: formatVisited(visitedAt),
       trips: Math.max(1, Number(trips) || 1),
       days: Math.max(1, Number(days) || 1),
       cities: cities
@@ -272,7 +284,7 @@ function CountrySheet({
         .filter(Boolean),
     });
     setIso('');
-    setVisitedAt('');
+    setVisitedAt(new Date().toISOString().slice(0, 10));
     setTrips('1');
     setDays('7');
     setCities('');
@@ -299,9 +311,11 @@ function CountrySheet({
         </Field>
         <Field label="Visited">
           <input
+            type="date"
             value={visitedAt}
             onChange={(e) => setVisitedAt(e.target.value)}
-            placeholder="March 2027"
+            required
+            className="date-input"
           />
         </Field>
         <Field label="Trips">

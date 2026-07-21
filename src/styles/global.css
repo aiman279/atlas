@@ -278,6 +278,14 @@ ol {
   min-height: 88px;
 }
 
+.date-input {
+  color-scheme: dark;
+}
+
+[data-theme='light'] .date-input {
+  color-scheme: light;
+}
+
 .btn-primary {
   border: none;
   border-radius: 999px;
