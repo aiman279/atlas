@@ -35,7 +35,7 @@ export function MemoryDetailView({
   return (
     <div className="page memory-detail">
       <button type="button" className="back-link" onClick={onBack}>
-        ← Memories
+        Back
       </button>
 
       <motion.div
