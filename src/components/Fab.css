@@ -1,0 +1,59 @@
+.fab-root {
+  position: fixed;
+  right: max(1rem, calc(50% - var(--max) / 2 + 1rem));
+  bottom: calc(var(--nav-h) + var(--safe-b) + 0.85rem);
+  z-index: 55;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+}
+
+.fab-btn {
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 50%;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  box-shadow: 0 10px 28px rgba(15, 15, 16, 0.22);
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.fab-btn.is-open {
+  background: var(--ink-2);
+  transform: rotate(90deg);
+}
+
+.fab-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: min(240px, calc(100vw - 2.5rem));
+}
+
+.fab-option {
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0.75rem 0.9rem;
+  box-shadow: var(--shadow);
+}
+
+.fab-option span {
+  display: block;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.fab-option small {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--ink-3);
+  font-size: 0.75rem;
+}

@@ -1,9 +1,10 @@
 export interface MemoryPhoto {
   id: string;
   url: string;
+  title: string;
+  description: string;
   date: string;
   location: string;
-  caption: string;
 }
 
 export interface Journey {
@@ -52,11 +53,19 @@ export interface CountryMemory {
   targetYear?: number;
 }
 
+export interface FundExpense {
+  id: string;
+  amount: number;
+  note: string;
+  date: string;
+}
+
 export interface TravelFund {
   goalName: string;
   saved: number;
   target: number;
   currency: string;
+  expenses: FundExpense[];
 }
 
 export interface Profile {
@@ -69,6 +78,7 @@ export interface Profile {
   travelDays: number;
   lifeChapter: string;
   chapterNote: string;
+  photo?: string;
 }
 
 export interface WaypointData {
@@ -86,3 +96,10 @@ export type AppView =
   | 'world'
   | 'country'
   | 'profile';
+
+export type FabAction =
+  | 'journey'
+  | 'memory'
+  | 'destination'
+  | 'expense'
+  | null;

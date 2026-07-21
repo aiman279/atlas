@@ -30,7 +30,7 @@ export function WorldView({
 }: {
   onOpenCountry: (id: string) => void;
 }) {
-  const data = useWaypoint();
+  const { data } = useWaypoint();
   const [mode, setMode] = useState<'visited' | 'dream'>('visited');
   const [countries, setCountries] = useState<CountryFeature[]>([]);
 

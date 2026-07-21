@@ -3,7 +3,7 @@ import { journeysByYear } from '../data/waypoint';
 import { useWaypoint } from '../hooks/useWaypoint';
 
 export function JourneysView({ onOpen }: { onOpen: (id: string) => void }) {
-  const data = useWaypoint();
+  const { data } = useWaypoint();
   const years = journeysByYear(data);
 
   return (
@@ -32,7 +32,7 @@ export function JourneysView({ onOpen }: { onOpen: (id: string) => void }) {
                     <h3>
                       {j.flag} {j.country}
                     </h3>
-                    <p>{j.cities.join(' · ')}</p>
+                    <p>{j.cities.join(' · ') || 'Untitled chapter'}</p>
                     <p className="journey-days">{j.durationDays} days</p>
                   </div>
                 </button>

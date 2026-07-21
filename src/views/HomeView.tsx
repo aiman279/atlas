@@ -13,16 +13,36 @@ export function HomeView({
 }: {
   onNavigate: (v: AppView, id?: string) => void;
 }) {
-  const data = useWaypoint();
+  const { data } = useWaypoint();
   const next = nextJourney(data);
   const days = Math.max(0, daysUntil(next.startDate));
   const fundPct = Math.min(
     100,
     Math.round((data.fund.saved / data.fund.target) * 100),
   );
-  const recent = data.journeys
+  const recentMemories = data.journeys
+    .flatMap((j) =>
+      j.photos.map((p) => ({ ...p, journeyId: j.id, flag: j.flag })),
+    )
+    .slice(0, 3);
+  const recentCovers = data.journeys
     .filter((j) => j.status === 'completed' && j.coverImage)
     .slice(0, 3);
+
+  const memories =
+    recentMemories.length > 0
+      ? recentMemories.map((m) => ({
+          id: m.id,
+          image: m.url,
+          label: m.title,
+          journeyId: m.journeyId,
+        }))
+      : recentCovers.map((j) => ({
+          id: j.id,
+          image: j.coverImage,
+          label: `${j.flag} ${j.country}`,
+          journeyId: j.id,
+        }));
 
   return (
     <motion.div
@@ -41,8 +61,13 @@ export function HomeView({
           className="home-avatar"
           onClick={() => onNavigate('profile')}
           aria-label="Open profile"
+          style={
+            data.profile.photo
+              ? { backgroundImage: `url(${data.profile.photo})` }
+              : undefined
+          }
         >
-          {data.profile.name.charAt(0)}
+          {!data.profile.photo && data.profile.name.charAt(0)}
         </button>
       </header>
 
@@ -67,7 +92,8 @@ export function HomeView({
             <p className="adventure-flag">{next.flag}</p>
             <h3>{next.country}</h3>
             <p>
-              {next.cities.join(' · ')} · {next.durationDays} days
+              {next.cities.join(' · ') || 'Open chapter'} · {next.durationDays}{' '}
+              days
             </p>
           </div>
         </button>
@@ -116,7 +142,7 @@ export function HomeView({
         </div>
       </section>
 
-      {recent.length > 0 && (
+      {memories.length > 0 && (
         <section className="home-section">
           <div className="section-head">
             <h2>Memories</h2>
@@ -125,17 +151,15 @@ export function HomeView({
             </button>
           </div>
           <div className="memory-row">
-            {recent.map((j) => (
+            {memories.map((m) => (
               <button
-                key={j.id}
+                key={m.id}
                 type="button"
                 className="memory-thumb"
-                onClick={() => onNavigate('journey-detail', j.id)}
+                onClick={() => onNavigate('journey-detail', m.journeyId)}
               >
-                <img src={j.coverImage} alt="" />
-                <span>
-                  {j.flag} {j.country}
-                </span>
+                <img src={m.image} alt="" />
+                <span>{m.label}</span>
               </button>
             ))}
           </div>

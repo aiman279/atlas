@@ -48,12 +48,15 @@
   height: 2.5rem;
   border-radius: 50%;
   background: var(--ink);
+  background-size: cover;
+  background-position: center;
   color: #fff;
   font-weight: 700;
   font-size: 1rem;
   display: grid;
   place-items: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .home-avatar.lg {
@@ -568,4 +571,77 @@
   font-size: 1.05rem;
   font-weight: 650;
   color: var(--ink-2);
+}
+
+.edit-chip {
+  position: absolute;
+  top: 0.85rem;
+  right: 1rem;
+  z-index: 5;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.profile-edit-head {
+  margin-bottom: 1rem;
+}
+
+.edit-panel {
+  padding-top: 3.5rem;
+}
+
+.edit-panel .form-stack,
+.page .form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.page .form-stack label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--ink-3);
+}
+
+.page .form-stack input,
+.page .form-stack textarea,
+.page .form-stack select,
+.edit-panel input,
+.edit-panel textarea {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.page .form-stack textarea,
+.edit-panel textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.btn-primary {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1rem;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
 }

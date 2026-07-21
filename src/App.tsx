@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
+import { ActionSheets } from './components/ActionSheets';
 import { BottomNav } from './components/BottomNav';
-import type { AppView } from './data/types';
+import { Fab } from './components/Fab';
+import type { AppView, FabAction } from './data/types';
 import { WaypointProvider } from './hooks/useWaypoint';
 import { CountryView } from './views/CountryView';
 import { HomeView } from './views/HomeView';
@@ -24,6 +26,8 @@ function WaypointApp() {
   const [view, setView] = useState<AppView>('home');
   const [journeyId, setJourneyId] = useState<string | null>(null);
   const [countryId, setCountryId] = useState<string | null>(null);
+  const [fabOpen, setFabOpen] = useState(false);
+  const [action, setAction] = useState<FabAction>(null);
 
   function navigate(next: AppView, id?: string) {
     if (next === 'journey-detail' && id) setJourneyId(id);
@@ -75,6 +79,23 @@ function WaypointApp() {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      <Fab
+        open={fabOpen}
+        onToggle={() => setFabOpen((v) => !v)}
+        onSelect={(a) => {
+          setFabOpen(false);
+          setAction(a);
+        }}
+      />
+
+      <ActionSheets
+        action={action}
+        onClose={() => setAction(null)}
+        onCreatedJourney={(id) => navigate('journey-detail', id)}
+        onCreatedCountry={(id) => navigate('country', id)}
+      />
+
       <BottomNav current={view} onNavigate={navigate} />
     </div>
   );

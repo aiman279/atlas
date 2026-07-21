@@ -1,7 +1,7 @@
 import { seedData } from './seed';
 import type { Journey, WaypointData } from './types';
 
-const STORAGE_KEY = 'waypoint-archive-v2';
+const STORAGE_KEY = 'waypoint-archive-v3';
 
 export function loadData(): WaypointData {
   try {
@@ -11,10 +11,54 @@ export function loadData(): WaypointData {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
       return fresh;
     }
-    return { ...structuredClone(seedData), ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw) as WaypointData;
+    return normalizeData({
+      ...structuredClone(seedData),
+      ...parsed,
+      profile: { ...seedData.profile, ...parsed.profile },
+      fund: {
+        ...seedData.fund,
+        ...parsed.fund,
+        expenses: parsed.fund?.expenses ?? [],
+      },
+    });
   } catch {
     return structuredClone(seedData);
   }
+}
+
+function normalizeData(data: WaypointData): WaypointData {
+  return {
+    ...data,
+    journeys: data.journeys.map((j) => ({
+      ...j,
+      photos: (j.photos ?? []).map(normalizePhoto),
+    })),
+    countries: data.countries.map((c) => ({
+      ...c,
+      photos: (c.photos ?? []).map(normalizePhoto),
+    })),
+  };
+}
+
+function normalizePhoto(p: {
+  id: string;
+  url: string;
+  title?: string;
+  description?: string;
+  caption?: string;
+  date: string;
+  location: string;
+}) {
+  const title = p.title || p.caption || 'Memory';
+  return {
+    id: p.id,
+    url: p.url,
+    title,
+    description: p.description || p.caption || '',
+    date: p.date,
+    location: p.location,
+  };
 }
 
 export function saveData(data: WaypointData) {
@@ -67,4 +111,20 @@ export function journeysByYear(data: WaypointData) {
     map.get(y)!.push(j);
   }
   return [...map.entries()].sort(([a], [b]) => b - a);
+}
+
+export function recomputeStats(data: WaypointData): WaypointData {
+  const visited = data.countries.filter((c) => c.kind === 'visited');
+  const countriesVisited = new Set(visited.map((c) => c.countryCode)).size;
+  const totalJourneys = data.journeys.length;
+  const travelDays = data.journeys.reduce((s, j) => s + j.durationDays, 0);
+  return {
+    ...data,
+    profile: {
+      ...data.profile,
+      countriesVisited: Math.max(countriesVisited, data.profile.countriesVisited),
+      totalJourneys: Math.max(totalJourneys, data.profile.totalJourneys),
+      travelDays: Math.max(travelDays, data.profile.travelDays),
+    },
+  };
 }

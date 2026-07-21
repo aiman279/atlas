@@ -1,0 +1,114 @@
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(15, 15, 16, 0.35);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sheet {
+  width: min(var(--max), 100%);
+  max-height: min(92dvh, 760px);
+  background: var(--surface);
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 -8px 40px rgba(15, 15, 16, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(15, 15, 16, 0.12);
+  margin: 0.55rem auto 0;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.15rem 0.5rem;
+}
+
+.sheet-head h2 {
+  font-size: 1.15rem;
+}
+
+.sheet-head button {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.sheet-body {
+  padding: 0.5rem 1.15rem calc(1.25rem + var(--safe-b));
+  overflow: auto;
+}
+
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.form-stack label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
+
+.form-stack input,
+.form-stack textarea,
+.form-stack select {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-stack textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.btn-primary {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1rem;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+}
+
+.btn-ghost {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  color: var(--ink-2);
+  font-weight: 600;
+}
