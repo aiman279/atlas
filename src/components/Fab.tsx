@@ -1,13 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import './Fab.css';
 import type { FabAction } from '../data/types';
+import './Fab.css';
 
 const actions: { id: Exclude<FabAction, null>; label: string; hint: string }[] =
   [
-    { id: 'memory', label: 'Add Memory', hint: 'A moment from your journey' },
-    { id: 'journey', label: 'Create Journey', hint: 'Start a new chapter' },
-    { id: 'destination', label: 'Add Destination', hint: 'Visited or dreaming' },
-    { id: 'expense', label: 'Add Expense', hint: 'Track travel spending' },
+    { id: 'chapter', label: 'Create Chapter', hint: 'A new period of your life' },
+    { id: 'memory', label: 'Add Memory', hint: 'A moment worth keeping' },
+    { id: 'goal', label: 'Add Goal', hint: 'Something you are becoming' },
+    {
+      id: 'achievement',
+      label: 'Add Achievement',
+      hint: 'A milestone you earned',
+    },
   ];
 
 export function Fab({
@@ -47,7 +51,7 @@ export function Fab({
         type="button"
         className={`fab-btn${open ? ' is-open' : ''}`}
         onClick={onToggle}
-        aria-label={open ? 'Close actions' : 'Add to your story'}
+        aria-label={open ? 'Close' : 'Add to your story'}
         aria-expanded={open}
       >
         <span aria-hidden>{open ? '×' : '+'}</span>

@@ -1,170 +1,101 @@
 import { motion } from 'framer-motion';
-import {
-  daysUntil,
-  formatMoney,
-  greeting,
-  nextJourney,
-} from '../data/waypoint';
 import type { AppView } from '../data/types';
-import { useWaypoint } from '../hooks/useWaypoint';
+import { useAtlas } from '../hooks/useAtlas';
+
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 18) return 'Good afternoon';
+  return 'Good evening';
+}
 
 export function HomeView({
   onNavigate,
 }: {
-  onNavigate: (v: AppView, id?: string) => void;
+  onNavigate: (view: AppView, id?: string) => void;
 }) {
-  const { data } = useWaypoint();
-  const next = nextJourney(data);
-  const days = Math.max(0, daysUntil(next.startDate));
-  const fundPct = Math.min(
-    100,
-    Math.round((data.fund.saved / data.fund.target) * 100),
-  );
-  const recentMemories = data.journeys
-    .flatMap((j) =>
-      j.photos.map((p) => ({ ...p, journeyId: j.id, flag: j.flag })),
-    )
-    .slice(0, 3);
-  const recentCovers = data.journeys
-    .filter((j) => j.status === 'completed' && j.coverImage)
-    .slice(0, 3);
-
-  const memories =
-    recentMemories.length > 0
-      ? recentMemories.map((m) => ({
-          id: m.id,
-          image: m.url,
-          label: m.title,
-          journeyId: m.journeyId,
-        }))
-      : recentCovers.map((j) => ({
-          id: j.id,
-          image: j.coverImage,
-          label: `${j.flag} ${j.country}`,
-          journeyId: j.id,
-        }));
+  const { data, currentChapter } = useAtlas();
+  const { profile } = data;
+  const chapter = currentChapter;
 
   return (
-    <motion.div
-      className="page home"
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
-    >
-      <header className="home-header">
-        <div>
-          <p className="home-hello">{greeting()}</p>
-          <h1 className="home-name">{data.profile.name}</h1>
-        </div>
-        <button
-          type="button"
-          className="home-avatar"
-          onClick={() => onNavigate('profile')}
-          aria-label="Open profile"
-          style={
-            data.profile.photo
-              ? { backgroundImage: `url(${data.profile.photo})` }
-              : undefined
-          }
+    <div className="page home-page">
+      <header className="home-brand">
+        <motion.p
+          className="brand-mark"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          {!data.profile.photo && data.profile.name.charAt(0)}
-        </button>
+          Atlas
+        </motion.p>
+        <motion.p
+          className="home-greeting"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.08 }}
+        >
+          {greeting()}, {profile.name}
+        </motion.p>
       </header>
 
-      <section className="chapter-chip">
-        <p className="chip-label">Current chapter</p>
-        <p className="chip-title">{data.profile.lifeChapter}</p>
-        <p className="chip-note">{data.profile.chapterNote}</p>
-      </section>
+      <motion.section
+        className="home-hero"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, delay: 0.12 }}
+        onClick={() => chapter && onNavigate('chapter-detail', chapter.id)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && chapter)
+            onNavigate('chapter-detail', chapter.id);
+        }}
+      >
+        <img
+          src={chapter?.coverImage}
+          alt=""
+          className="home-hero-img"
+        />
+        <div className="home-hero-veil" />
+        <div className="home-hero-copy">
+          <p className="eyebrow">Current chapter</p>
+          <h1>“{chapter?.title ?? 'Building My Future'}”</h1>
+          <p className="home-hero-sub">
+            {chapter?.subtitle ?? 'Creating a life I am proud of.'}
+          </p>
+        </div>
+      </motion.section>
 
-      <section className="home-section">
-        <div className="section-head">
-          <h2>Next adventure</h2>
-          <span>{days} days</span>
-        </div>
-        <button
-          type="button"
-          className="adventure-card"
-          onClick={() => onNavigate('journey-detail', next.id)}
-        >
-          <img src={next.coverImage} alt="" className="adventure-img" />
-          <div className="adventure-veil">
-            <p className="adventure-flag">{next.flag}</p>
-            <h3>{next.country}</h3>
-            <p>
-              {next.cities.join(' · ') || 'Open chapter'} · {next.durationDays}{' '}
-              days
-            </p>
-          </div>
-        </button>
-      </section>
+      <motion.section
+        className="home-focus"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.28 }}
+      >
+        <p className="eyebrow">Current focus</p>
+        <ul className="focus-grid">
+          {profile.focusAreas.map((f) => (
+            <li key={f.id}>
+              <span aria-hidden>{f.icon}</span>
+              <span>{f.label}</span>
+            </li>
+          ))}
+        </ul>
+      </motion.section>
 
-      <section className="home-section">
-        <div className="section-head">
-          <h2>Travel fund</h2>
-          <span>{fundPct}%</span>
-        </div>
-        <div className="fund-card">
-          <div className="fund-top">
-            <div>
-              <p className="fund-label">{data.fund.goalName}</p>
-              <p className="fund-saved">
-                {formatMoney(data.fund.saved, data.fund.currency)}
-              </p>
-            </div>
-            <p className="fund-target">
-              of {formatMoney(data.fund.target, data.fund.currency)}
-            </p>
-          </div>
-          <div className="fund-bar">
-            <span style={{ width: `${fundPct}%` }} />
-          </div>
-        </div>
-      </section>
-
-      <section className="home-section">
-        <div className="section-head">
-          <h2>Your journey</h2>
-        </div>
-        <div className="stat-cards">
-          <div className="stat-card">
-            <p className="stat-num">{data.profile.countriesVisited}</p>
-            <p className="stat-lbl">Countries</p>
-          </div>
-          <div className="stat-card">
-            <p className="stat-num">{data.profile.totalJourneys}</p>
-            <p className="stat-lbl">Journeys</p>
-          </div>
-          <div className="stat-card">
-            <p className="stat-num">{data.profile.travelDays}</p>
-            <p className="stat-lbl">Days</p>
-          </div>
-        </div>
-      </section>
-
-      {memories.length > 0 && (
-        <section className="home-section">
-          <div className="section-head">
-            <h2>Memories</h2>
-            <button type="button" onClick={() => onNavigate('journeys')}>
-              See all
-            </button>
-          </div>
-          <div className="memory-row">
-            {memories.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                className="memory-thumb"
-                onClick={() => onNavigate('journey-detail', m.journeyId)}
-              >
-                <img src={m.image} alt="" />
-                <span>{m.label}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-    </motion.div>
+      <motion.section
+        className="home-milestone"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.36 }}
+      >
+        <p className="eyebrow">Next milestone</p>
+        <h2>{profile.nextMilestone.title}</h2>
+        <p className="milestone-meta">
+          <span>{profile.nextMilestone.daysAway} days away</span>
+        </p>
+      </motion.section>
+    </div>
   );
 }

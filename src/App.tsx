@@ -4,43 +4,43 @@ import { ActionSheets } from './components/ActionSheets';
 import { BottomNav } from './components/BottomNav';
 import { Fab } from './components/Fab';
 import type { AppView, FabAction } from './data/types';
-import { WaypointProvider } from './hooks/useWaypoint';
-import { CountryView } from './views/CountryView';
+import { AtlasProvider } from './hooks/useAtlas';
+import { ChapterDetailView } from './views/ChapterDetailView';
+import { ChaptersView } from './views/ChaptersView';
 import { HomeView } from './views/HomeView';
-import { JourneyDetailView } from './views/JourneyDetailView';
-import { JourneysView } from './views/JourneysView';
-import { ProfileView } from './views/ProfileView';
-import { WorldView } from './views/WorldView';
+import { MeView } from './views/MeView';
+import { MemoriesView } from './views/MemoriesView';
+import { MemoryDetailView } from './views/MemoryDetailView';
 import './styles/global.css';
 import './views/views.css';
 
 export default function App() {
   return (
-    <WaypointProvider>
-      <WaypointApp />
-    </WaypointProvider>
+    <AtlasProvider>
+      <AtlasApp />
+    </AtlasProvider>
   );
 }
 
-function WaypointApp() {
+function AtlasApp() {
   const [view, setView] = useState<AppView>('home');
-  const [journeyId, setJourneyId] = useState<string | null>(null);
-  const [countryId, setCountryId] = useState<string | null>(null);
+  const [chapterId, setChapterId] = useState<string | null>(null);
+  const [memoryId, setMemoryId] = useState<string | null>(null);
   const [fabOpen, setFabOpen] = useState(false);
   const [action, setAction] = useState<FabAction>(null);
 
   function navigate(next: AppView, id?: string) {
-    if (next === 'journey-detail' && id) setJourneyId(id);
-    if (next === 'country' && id) setCountryId(id);
+    if (next === 'chapter-detail' && id) setChapterId(id);
+    if (next === 'memory-detail' && id) setMemoryId(id);
     setView(next);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   const key =
-    view === 'journey-detail'
-      ? `j-${journeyId}`
-      : view === 'country'
-        ? `c-${countryId}`
+    view === 'chapter-detail'
+      ? `ch-${chapterId}`
+      : view === 'memory-detail'
+        ? `mem-${memoryId}`
         : view;
 
   return (
@@ -52,30 +52,32 @@ function WaypointApp() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
+            transition={{ duration: 0.28 }}
           >
             {view === 'home' && <HomeView onNavigate={navigate} />}
-            {view === 'journeys' && (
-              <JourneysView
-                onOpen={(id) => navigate('journey-detail', id)}
+            {view === 'chapters' && (
+              <ChaptersView
+                onOpen={(id) => navigate('chapter-detail', id)}
               />
             )}
-            {view === 'journey-detail' && journeyId && (
-              <JourneyDetailView
-                journeyId={journeyId}
-                onBack={() => navigate('journeys')}
+            {view === 'chapter-detail' && chapterId && (
+              <ChapterDetailView
+                chapterId={chapterId}
+                onBack={() => navigate('chapters')}
               />
             )}
-            {view === 'world' && (
-              <WorldView onOpenCountry={(id) => navigate('country', id)} />
-            )}
-            {view === 'country' && countryId && (
-              <CountryView
-                countryId={countryId}
-                onBack={() => navigate('world')}
+            {view === 'memories' && (
+              <MemoriesView
+                onOpen={(id) => navigate('memory-detail', id)}
               />
             )}
-            {view === 'profile' && <ProfileView />}
+            {view === 'memory-detail' && memoryId && (
+              <MemoryDetailView
+                memoryId={memoryId}
+                onBack={() => navigate('memories')}
+              />
+            )}
+            {view === 'me' && <MeView />}
           </motion.div>
         </AnimatePresence>
       </main>
@@ -92,8 +94,8 @@ function WaypointApp() {
       <ActionSheets
         action={action}
         onClose={() => setAction(null)}
-        onCreatedJourney={(id) => navigate('journey-detail', id)}
-        onCreatedCountry={(id) => navigate('country', id)}
+        onCreatedChapter={(id) => navigate('chapter-detail', id)}
+        onCreatedMemory={(id) => navigate('memory-detail', id)}
       />
 
       <BottomNav current={view} onNavigate={navigate} />

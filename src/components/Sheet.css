@@ -49,22 +49,29 @@
   overflow: auto;
 }
 
+.sheet-form,
 .form-stack {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
 }
 
+.field,
 .form-stack label {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   font-size: 0.78rem;
-  font-weight: 650;
+  font-weight: 600;
   color: var(--ink-3);
   letter-spacing: 0.02em;
 }
 
+.field input,
+.field textarea,
+.field select,
+.sheet-form input,
+.sheet-form textarea,
 .form-stack input,
 .form-stack textarea,
 .form-stack select {
@@ -78,6 +85,8 @@
   font-size: 0.95rem;
 }
 
+.field textarea,
+.sheet-form textarea,
 .form-stack textarea {
   resize: vertical;
   min-height: 88px;

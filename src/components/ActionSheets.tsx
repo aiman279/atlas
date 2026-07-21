@@ -1,449 +1,361 @@
-import { useMemo, useState } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
+import type { FabAction } from '../data/types';
+import { useAtlas } from '../hooks/useAtlas';
 import { ImagePicker } from './ImagePicker';
 import { Sheet } from './Sheet';
-import { useWaypoint } from '../hooks/useWaypoint';
-import type { FabAction } from '../data/types';
-import { nextJourney } from '../data/waypoint';
+
+const defaultCover =
+  'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80';
 
 export function ActionSheets({
   action,
   onClose,
-  onCreatedJourney,
-  onCreatedCountry,
+  onCreatedChapter,
+  onCreatedMemory,
 }: {
   action: FabAction;
   onClose: () => void;
-  onCreatedJourney?: (id: string) => void;
-  onCreatedCountry?: (id: string) => void;
+  onCreatedChapter?: (id: string) => void;
+  onCreatedMemory?: (id: string) => void;
 }) {
-  const {
-    data,
-    addJourney,
-    addMemory,
-    addDestination,
-    addExpense,
-  } = useWaypoint();
-
   return (
     <>
-      <CreateJourneySheet
-        open={action === 'journey'}
+      <ChapterSheet
+        open={action === 'chapter'}
         onClose={onClose}
-        onSubmit={(payload) => {
-          const id = addJourney(payload);
-          onClose();
-          onCreatedJourney?.(id);
-        }}
+        onCreated={onCreatedChapter}
       />
-      <AddMemorySheet
+      <MemorySheet
         open={action === 'memory'}
-        journeys={data.journeys}
-        defaultJourneyId={nextJourney(data)?.id}
         onClose={onClose}
-        onSubmit={(payload) => {
-          addMemory(payload);
-          onClose();
-          onCreatedJourney?.(payload.journeyId);
-        }}
+        onCreated={onCreatedMemory}
       />
-      <AddDestinationSheet
-        open={action === 'destination'}
-        onClose={onClose}
-        onSubmit={(payload) => {
-          const id = addDestination(payload);
-          onClose();
-          onCreatedCountry?.(id);
-        }}
-      />
-      <AddExpenseSheet
-        open={action === 'expense'}
-        onClose={onClose}
-        onSubmit={(amount, note) => {
-          addExpense(amount, note);
-          onClose();
-        }}
-      />
+      <GoalSheet open={action === 'goal'} onClose={onClose} />
+      <AchievementSheet open={action === 'achievement'} onClose={onClose} />
     </>
   );
 }
 
-function CreateJourneySheet({
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className="field">
+      <span>{label}</span>
+      {children}
+    </label>
+  );
+}
+
+function ChapterSheet({
   open,
   onClose,
-  onSubmit,
+  onCreated,
 }: {
   open: boolean;
   onClose: () => void;
-  onSubmit: (payload: {
-    country: string;
-    flag: string;
-    cities: string;
-    startDate: string;
-    durationDays: number;
-    coverImage: string;
-    reflection?: string;
-  }) => void;
+  onCreated?: (id: string) => void;
 }) {
-  const [country, setCountry] = useState('');
-  const [flag, setFlag] = useState('✈️');
-  const [cities, setCities] = useState('');
-  const [startDate, setStartDate] = useState(
-    new Date().toISOString().slice(0, 10),
-  );
-  const [days, setDays] = useState('7');
+  const { data, addChapter } = useAtlas();
+  const [title, setTitle] = useState('');
+  const [period, setPeriod] = useState('');
+  const [story, setStory] = useState('');
   const [cover, setCover] = useState('');
-  const [reflection, setReflection] = useState('');
 
-  const canSave = country.trim() && cover && Number(days) > 0;
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    if (!title.trim()) return;
+    const nextNum =
+      Math.max(0, ...data.chapters.map((c) => c.number)) + 1;
+    const id = addChapter({
+      number: nextNum,
+      title: title.trim(),
+      period: period.trim() || 'Present',
+      coverImage: cover || defaultCover,
+      story: story.trim(),
+      status: 'current',
+    });
+    setTitle('');
+    setPeriod('');
+    setStory('');
+    setCover('');
+    onClose();
+    onCreated?.(id);
+  }
 
   return (
-    <Sheet open={open} title="New journey" onClose={onClose}>
-      <div className="form-stack">
+    <Sheet open={open} title="Create Chapter" onClose={onClose}>
+      <form className="sheet-form" onSubmit={submit}>
         <ImagePicker
-          label="Add a cover photo"
+          label="Cover image"
           value={cover}
           onChange={setCover}
           tall
         />
-        <label>
-          Country
+        <Field label="Title">
           <input
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder="Japan"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Building Myself"
+            required
           />
-        </label>
-        <label>
-          Flag emoji
+        </Field>
+        <Field label="Period">
           <input
-            value={flag}
-            onChange={(e) => setFlag(e.target.value)}
-            placeholder="🇯🇵"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            placeholder="2026 — Present"
           />
-        </label>
-        <label>
-          Cities
-          <input
-            value={cities}
-            onChange={(e) => setCities(e.target.value)}
-            placeholder="Tokyo, Kyoto"
-          />
-        </label>
-        <label>
-          Date
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </label>
-        <label>
-          Duration (days)
-          <input
-            type="number"
-            min={1}
-            value={days}
-            onChange={(e) => setDays(e.target.value)}
-          />
-        </label>
-        <label>
-          A note for later
+        </Field>
+        <Field label="Story">
           <textarea
-            value={reflection}
-            onChange={(e) => setReflection(e.target.value)}
-            placeholder="What do you hope this journey becomes?"
+            value={story}
+            onChange={(e) => setStory(e.target.value)}
+            placeholder="What is this chapter about?"
+            rows={4}
           />
-        </label>
-        <div className="form-actions">
-          <button type="button" className="btn-ghost" onClick={onClose}>
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={!canSave}
-            onClick={() =>
-              onSubmit({
-                country: country.trim(),
-                flag: flag.trim() || '✈️',
-                cities,
-                startDate,
-                durationDays: Number(days) || 1,
-                coverImage: cover,
-                reflection: reflection.trim(),
-              })
-            }
-          >
-            Create journey
-          </button>
-        </div>
-      </div>
+        </Field>
+        <button type="submit" className="btn-primary">
+          Create chapter
+        </button>
+      </form>
     </Sheet>
   );
 }
 
-function AddMemorySheet({
+function MemorySheet({
   open,
-  journeys,
-  defaultJourneyId,
   onClose,
-  onSubmit,
+  onCreated,
 }: {
   open: boolean;
-  journeys: { id: string; country: string; flag: string }[];
-  defaultJourneyId?: string;
   onClose: () => void;
-  onSubmit: (payload: {
-    journeyId: string;
-    url: string;
-    title: string;
-    description: string;
-    date: string;
-    location: string;
-  }) => void;
+  onCreated?: (id: string) => void;
 }) {
-  const [journeyId, setJourneyId] = useState(defaultJourneyId || '');
-  const [photo, setPhoto] = useState('');
+  const { addMemory } = useAtlas();
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
+  const [story, setStory] = useState('');
+  const [feeling, setFeeling] = useState('');
+  const [image, setImage] = useState('');
 
-  const activeId = useMemo(
-    () => journeyId || defaultJourneyId || journeys[0]?.id || '',
-    [journeyId, defaultJourneyId, journeys],
-  );
-
-  const canSave = Boolean(photo && title.trim() && activeId);
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    if (!title.trim() || !image) return;
+    const id = addMemory({
+      title: title.trim(),
+      date: date || new Date().toISOString().slice(0, 10),
+      location: location.trim() || 'Somewhere',
+      story: story.trim(),
+      feeling: feeling.trim() || 'Present',
+      image,
+    });
+    setTitle('');
+    setDate('');
+    setLocation('');
+    setStory('');
+    setFeeling('');
+    setImage('');
+    onClose();
+    onCreated?.(id);
+  }
 
   return (
-    <Sheet open={open} title="Add a memory" onClose={onClose}>
-      <div className="form-stack">
+    <Sheet open={open} title="Add Memory" onClose={onClose}>
+      <form className="sheet-form" onSubmit={submit}>
         <ImagePicker
-          label="Choose a moment"
-          value={photo}
-          onChange={setPhoto}
+          label="Photo"
+          value={image}
+          onChange={setImage}
           tall
         />
-        <label>
-          Title
+        <Field label="Title">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="The morning light"
+            placeholder="A moment worth keeping"
+            required
           />
-        </label>
-        <label>
-          Description
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="What made this moment stay with you?"
-          />
-        </label>
-        <label>
-          Journey
-          <select
-            value={activeId}
-            onChange={(e) => setJourneyId(e.target.value)}
-          >
-            {journeys.map((j) => (
-              <option key={j.id} value={j.id}>
-                {j.flag} {j.country}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Date
+        </Field>
+        <Field label="Date">
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
           />
-        </label>
-        <label>
-          Location
+        </Field>
+        <Field label="Location">
           <input
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="Kyoto"
+            placeholder="Tokyo"
           />
-        </label>
-        <div className="form-actions">
-          <button type="button" className="btn-ghost" onClick={onClose}>
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={!canSave}
-            onClick={() =>
-              onSubmit({
-                journeyId: activeId,
-                url: photo,
-                title: title.trim(),
-                description: description.trim(),
-                date,
-                location: location.trim() || 'Somewhere',
-              })
-            }
-          >
-            Save memory
-          </button>
-        </div>
-      </div>
+        </Field>
+        <Field label="Story">
+          <textarea
+            value={story}
+            onChange={(e) => setStory(e.target.value)}
+            placeholder="What happened?"
+            rows={3}
+          />
+        </Field>
+        <Field label="Feeling">
+          <input
+            value={feeling}
+            onChange={(e) => setFeeling(e.target.value)}
+            placeholder="Alive, grateful, proud…"
+          />
+        </Field>
+        <button type="submit" className="btn-primary" disabled={!image}>
+          Save memory
+        </button>
+      </form>
     </Sheet>
   );
 }
 
-function AddDestinationSheet({
-  open,
-  onClose,
-  onSubmit,
-}: {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: (payload: {
-    country: string;
-    flag: string;
-    dream: string;
-    targetYear: number;
-    coverImage: string;
-    kind: 'visited' | 'dream';
-  }) => void;
-}) {
-  const [country, setCountry] = useState('');
-  const [flag, setFlag] = useState('🌍');
-  const [dream, setDream] = useState('');
-  const [year, setYear] = useState(String(new Date().getFullYear() + 1));
-  const [kind, setKind] = useState<'visited' | 'dream'>('dream');
-  const [cover, setCover] = useState('');
+function GoalSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { addGoal } = useAtlas();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [icon, setIcon] = useState('✦');
+  const [progress, setProgress] = useState(10);
 
-  const canSave = country.trim() && cover;
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    if (!title.trim()) return;
+    addGoal({
+      title: title.trim(),
+      icon: icon || '✦',
+      description: description.trim(),
+      progress: Math.min(1, Math.max(0, progress / 100)),
+    });
+    setTitle('');
+    setDescription('');
+    setIcon('✦');
+    setProgress(10);
+    onClose();
+  }
 
   return (
-    <Sheet open={open} title="Add destination" onClose={onClose}>
-      <div className="form-stack">
-        <ImagePicker
-          label="Add a destination photo"
-          value={cover}
-          onChange={setCover}
-          tall
-        />
-        <label>
-          Type
-          <select
-            value={kind}
-            onChange={(e) => setKind(e.target.value as 'visited' | 'dream')}
-          >
-            <option value="dream">Dreaming</option>
-            <option value="visited">Visited</option>
-          </select>
-        </label>
-        <label>
-          Country
+    <Sheet open={open} title="Add Goal" onClose={onClose}>
+      <form className="sheet-form" onSubmit={submit}>
+        <Field label="Title">
           <input
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder="Iceland"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Explore the world"
+            required
           />
-        </label>
-        <label>
-          Flag emoji
-          <input value={flag} onChange={(e) => setFlag(e.target.value)} />
-        </label>
-        <label>
-          {kind === 'dream' ? 'Dream' : 'Memory note'}
+        </Field>
+        <Field label="Icon">
           <input
-            value={dream}
-            onChange={(e) => setDream(e.target.value)}
-            placeholder="See the northern lights"
+            value={icon}
+            onChange={(e) => setIcon(e.target.value)}
+            placeholder="🌎"
+            maxLength={4}
           />
-        </label>
-        <label>
-          Target year
+        </Field>
+        <Field label="Description">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
+            placeholder="Why this matters"
+          />
+        </Field>
+        <Field label={`Progress — ${progress}%`}>
           <input
-            type="number"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
+            type="range"
+            min={0}
+            max={100}
+            value={progress}
+            onChange={(e) => setProgress(Number(e.target.value))}
           />
-        </label>
-        <div className="form-actions">
-          <button type="button" className="btn-ghost" onClick={onClose}>
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={!canSave}
-            onClick={() =>
-              onSubmit({
-                country: country.trim(),
-                flag: flag.trim() || '🌍',
-                dream: dream.trim(),
-                targetYear: Number(year) || new Date().getFullYear(),
-                coverImage: cover,
-                kind,
-              })
-            }
-          >
-            Add destination
-          </button>
-        </div>
-      </div>
+        </Field>
+        <button type="submit" className="btn-primary">
+          Add goal
+        </button>
+      </form>
     </Sheet>
   );
 }
 
-function AddExpenseSheet({
+function AchievementSheet({
   open,
   onClose,
-  onSubmit,
 }: {
   open: boolean;
   onClose: () => void;
-  onSubmit: (amount: number, note: string) => void;
 }) {
-  const [amount, setAmount] = useState('');
-  const [note, setNote] = useState('');
-  const canSave = Number(amount) > 0;
+  const { addAchievement } = useAtlas();
+  const [title, setTitle] = useState('');
+  const [date, setDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [reflection, setReflection] = useState('');
+  const [image, setImage] = useState('');
+
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    if (!title.trim()) return;
+    addAchievement({
+      title: title.trim(),
+      date: date || new Date().toISOString().slice(0, 7),
+      description: description.trim(),
+      reflection: reflection.trim(),
+      image: image || undefined,
+    });
+    setTitle('');
+    setDate('');
+    setDescription('');
+    setReflection('');
+    setImage('');
+    onClose();
+  }
 
   return (
-    <Sheet open={open} title="Add expense" onClose={onClose}>
-      <div className="form-stack">
-        <label>
-          Amount (RM)
+    <Sheet open={open} title="Add Achievement" onClose={onClose}>
+      <form className="sheet-form" onSubmit={submit}>
+        <ImagePicker label="Photo (optional)" value={image} onChange={setImage} />
+        <Field label="Title">
           <input
-            type="number"
-            inputMode="decimal"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="120"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Bought my first home"
+            required
           />
-        </label>
-        <label>
-          What for?
+        </Field>
+        <Field label="Date">
           <input
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="Train pass"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            placeholder="2026-03"
           />
-        </label>
-        <div className="form-actions">
-          <button type="button" className="btn-ghost" onClick={onClose}>
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={!canSave}
-            onClick={() => onSubmit(Number(amount), note.trim())}
-          >
-            Save expense
-          </button>
-        </div>
-      </div>
+        </Field>
+        <Field label="Description">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={2}
+          />
+        </Field>
+        <Field label="Reflection">
+          <textarea
+            value={reflection}
+            onChange={(e) => setReflection(e.target.value)}
+            rows={3}
+            placeholder="What did this mean to you?"
+          />
+        </Field>
+        <button type="submit" className="btn-primary">
+          Save achievement
+        </button>
+      </form>
     </Sheet>
   );
 }

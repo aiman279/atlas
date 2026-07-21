@@ -1,11 +1,11 @@
 import type { AppView } from '../data/types';
 import './BottomNav.css';
 
-const items: { view: AppView; label: string; icon: string }[] = [
-  { view: 'home', label: 'Home', icon: '⌂' },
-  { view: 'journeys', label: 'Journeys', icon: '◇' },
-  { view: 'world', label: 'World', icon: '○' },
-  { view: 'profile', label: 'Profile', icon: '☺' },
+const tabs: { id: AppView; label: string; icon: string }[] = [
+  { id: 'home', label: 'Home', icon: '⌂' },
+  { id: 'chapters', label: 'Chapters', icon: '☰' },
+  { id: 'memories', label: 'Memories', icon: '◎' },
+  { id: 'me', label: 'Me', icon: '○' },
 ];
 
 export function BottomNav({
@@ -13,29 +13,29 @@ export function BottomNav({
   onNavigate,
 }: {
   current: AppView;
-  onNavigate: (v: AppView) => void;
+  onNavigate: (view: AppView) => void;
 }) {
   const active =
-    current === 'journey-detail'
-      ? 'journeys'
-      : current === 'country'
-        ? 'world'
+    current === 'chapter-detail'
+      ? 'chapters'
+      : current === 'memory-detail'
+        ? 'memories'
         : current;
 
   return (
     <nav className="bottom-nav" aria-label="Main">
-      {items.map((item) => (
+      {tabs.map((tab) => (
         <button
-          key={item.view}
+          key={tab.id}
           type="button"
-          className={active === item.view ? 'is-active' : undefined}
-          onClick={() => onNavigate(item.view)}
-          aria-current={active === item.view ? 'page' : undefined}
+          className={`nav-tab${active === tab.id ? ' is-active' : ''}`}
+          onClick={() => onNavigate(tab.id)}
+          aria-current={active === tab.id ? 'page' : undefined}
         >
           <span className="nav-icon" aria-hidden>
-            {item.icon}
+            {tab.icon}
           </span>
-          <span>{item.label}</span>
+          <span className="nav-label">{tab.label}</span>
         </button>
       ))}
     </nav>

@@ -1,105 +1,94 @@
-export interface MemoryPhoto {
+export interface Moment {
   id: string;
-  url: string;
+  kind: 'achievement' | 'decision' | 'experience' | 'lesson';
   title: string;
-  description: string;
+  date: string;
+  reflection: string;
+  image?: string;
+}
+
+export interface Chapter {
+  id: string;
+  number: number;
+  title: string;
+  subtitle?: string;
+  period: string;
+  coverImage: string;
+  story: string;
+  status: 'current' | 'past' | 'upcoming';
+  moments: Moment[];
+}
+
+export interface Memory {
+  id: string;
+  title: string;
   date: string;
   location: string;
+  story: string;
+  feeling: string;
+  image: string;
 }
 
-export interface Journey {
+export interface Goal {
   id: string;
-  country: string;
-  countryCode: string;
-  flag: string;
-  title?: string;
-  cities: string[];
-  startDate: string;
-  durationDays: number;
-  coverImage: string;
-  placesVisited: string[];
-  photos: MemoryPhoto[];
-  reflection: string;
-  rating: number;
-  status: 'upcoming' | 'completed';
-  isNext: boolean;
+  title: string;
+  icon: string;
+  description: string;
+  progress: number;
+  reflection?: string;
+  date?: string;
 }
 
-export interface DreamDestination {
+export interface Achievement {
   id: string;
-  country: string;
-  countryCode: string;
-  flag: string;
-  dream: string;
-  targetYear: number;
-  coverImage: string;
-}
-
-export interface CountryMemory {
-  id: string;
-  country: string;
-  countryCode: string;
-  flag: string;
-  coverImage: string;
-  visitedAt: string;
-  days: number;
-  cities: string[];
-  photos: MemoryPhoto[];
-  reflection: string;
-  rating: number;
-  journeyId?: string;
-  kind: 'visited' | 'dream';
-  dream?: string;
-  targetYear?: number;
-}
-
-export interface FundExpense {
-  id: string;
-  amount: number;
-  note: string;
+  title: string;
   date: string;
+  description: string;
+  reflection: string;
+  image?: string;
 }
 
-export interface TravelFund {
-  goalName: string;
-  saved: number;
-  target: number;
-  currency: string;
-  expenses: FundExpense[];
+export interface FocusArea {
+  id: string;
+  label: string;
+  icon: string;
+}
+
+export interface Milestone {
+  title: string;
+  date: string;
+  daysAway: number;
 }
 
 export interface Profile {
   name: string;
-  role: string;
-  travelStyle: string;
-  preferences: string[];
-  countriesVisited: number;
-  totalJourneys: number;
-  travelDays: number;
-  lifeChapter: string;
-  chapterNote: string;
+  philosophy: string;
+  values: string[];
   photo?: string;
+  currentChapterId: string;
+  focusAreas: FocusArea[];
+  nextMilestone: Milestone;
 }
 
-export interface WaypointData {
+export interface AtlasData {
   profile: Profile;
-  fund: TravelFund;
-  journeys: Journey[];
-  dreams: DreamDestination[];
-  countries: CountryMemory[];
+  chapters: Chapter[];
+  memories: Memory[];
+  goals: Goal[];
+  achievements: Achievement[];
 }
 
 export type AppView =
   | 'home'
-  | 'journeys'
-  | 'journey-detail'
-  | 'world'
-  | 'country'
-  | 'profile';
+  | 'chapters'
+  | 'chapter-detail'
+  | 'memories'
+  | 'memory-detail'
+  | 'me';
 
 export type FabAction =
-  | 'journey'
+  | 'chapter'
   | 'memory'
-  | 'destination'
-  | 'expense'
+  | 'goal'
+  | 'achievement'
   | null;

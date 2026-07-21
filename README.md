@@ -1,13 +1,14 @@
-# Waypoint
+# Atlas
 
-A personal travel archive — a quiet digital passport for places, memories, and dreams.
+A personal life operating system — your digital autobiography.
 
-## Sections
+Capture life chapters, memories, goals, and achievements in a calm, premium mobile experience.
 
-- **Home** — calm overview
-- **Journeys** — adventure chapters as a timeline
-- **World** — visited & dream map with memory pages
-- **Profile** — simple explorer identity
+## Stack
+
+- Vite + React + TypeScript
+- Framer Motion
+- localStorage (`atlas-life-v1`)
 
 ## Develop
 
@@ -16,4 +17,8 @@ npm install
 npm run dev
 ```
 
-Data: `localStorage` key `waypoint-archive-v1`.
+## Build
+
+```bash
+npm run build
+```
