@@ -8,19 +8,19 @@
 }
 
 .home-greeting {
-  margin-top: 0.35rem;
-  font-size: 1.05rem;
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
   color: var(--ink-2);
+  font-weight: 400;
 }
 
 .home-hero {
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
-  min-height: 380px;
+  min-height: 360px;
   margin-bottom: 2rem;
   cursor: pointer;
-  box-shadow: var(--shadow);
 }
 
 .home-hero-img {
@@ -58,17 +58,19 @@
 }
 
 .home-hero-copy h1 {
-  font-size: clamp(1.85rem, 7vw, 2.35rem);
-  font-weight: 600;
-  margin-bottom: 0.65rem;
-  max-width: 12ch;
+  font-size: clamp(1.6rem, 6.5vw, 2rem);
+  font-weight: 500;
+  margin-bottom: 0.55rem;
+  max-width: 14ch;
+  letter-spacing: -0.03em;
 }
 
 .home-hero-sub {
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   line-height: 1.45;
-  opacity: 0.88;
+  opacity: 0.82;
   max-width: 28ch;
+  font-weight: 400;
 }
 
 .home-focus {
@@ -76,21 +78,21 @@
 }
 
 .focus-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
 }
 
 .focus-grid li {
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  padding: 1rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-  font-size: 0.95rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+  font-weight: 400;
+  font-size: 0.92rem;
+  color: var(--ink-2);
 }
 
 .focus-grid li span:first-child {
@@ -103,8 +105,9 @@
 }
 
 .home-milestone h2 {
-  font-size: 1.65rem;
-  margin-bottom: 0.4rem;
+  font-size: 1.35rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
 }
 
 .milestone-meta {
@@ -133,7 +136,6 @@
   border-radius: var(--radius);
   overflow: hidden;
   aspect-ratio: 4 / 5;
-  box-shadow: var(--shadow);
 }
 
 .chapter-cover img {
@@ -157,7 +159,8 @@
 }
 
 .chapter-meta h2 {
-  font-size: 1.55rem;
+  font-size: 1.35rem;
+  font-weight: 500;
   margin-bottom: 0.25rem;
 }
 
@@ -220,7 +223,8 @@
 }
 
 .chapter-detail-copy h1 {
-  font-size: 2.1rem;
+  font-size: 1.75rem;
+  font-weight: 500;
   margin-bottom: 0.25rem;
 }
 
@@ -256,11 +260,10 @@
 }
 
 .moment-reflection {
-  font-family: var(--display);
-  font-style: italic;
   color: var(--ink-2);
-  font-size: 1.05rem;
-  line-height: 1.45;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 /* —— Memories —— */
@@ -288,7 +291,6 @@
   border-radius: var(--radius);
   overflow: hidden;
   aspect-ratio: 3 / 4;
-  box-shadow: var(--shadow);
 }
 
 .memory-media img {
@@ -310,7 +312,8 @@
 }
 
 .memory-overlay h2 {
-  font-size: 1.45rem;
+  font-size: 1.25rem;
+  font-weight: 500;
   margin-bottom: 0.2rem;
 }
 
@@ -331,7 +334,6 @@
   overflow: hidden;
   aspect-ratio: 3 / 4;
   margin-bottom: 1.5rem;
-  box-shadow: var(--shadow);
 }
 
 .memory-detail-media img {
@@ -341,7 +343,8 @@
 }
 
 .memory-detail-body h1 {
-  font-size: 2rem;
+  font-size: 1.65rem;
+  font-weight: 500;
   margin-bottom: 0.35rem;
 }
 
@@ -387,16 +390,17 @@
 }
 
 .me-head h1 {
-  font-size: 2.2rem;
+  font-size: 1.75rem;
+  font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
 .philosophy {
-  font-family: var(--display);
-  font-style: italic;
-  font-size: 1.15rem;
+  font-size: 1rem;
+  font-weight: 400;
   color: var(--ink-2);
-  max-width: 22ch;
+  max-width: 24ch;
+  line-height: 1.5;
 }
 
 .me-section {
@@ -412,13 +416,11 @@
 }
 
 .value-list li {
-  padding: 0.55rem 0.95rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: 0.4rem 0;
+  margin-right: 1.25rem;
+  font-size: 0.92rem;
+  font-weight: 400;
   color: var(--ink-2);
-  background: var(--surface);
 }
 
 .goal-list {
