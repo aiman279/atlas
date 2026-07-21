@@ -1,15 +1,15 @@
 # Waypoint
 
-A personal operating system for solo travelers — prepare, manage, and improve your adventures.
+A personal operating system for solo travelers — prepare, manage, and build your travel story.
 
-## Features
+## Navigation
 
-- **Dashboard** — readiness score, countdown, wallet, quick actions
-- **Missions** — trip chapters with preparation, timeline, budget, notes
-- **Gear** — one-bag packing system with weight tracking
-- **Travel Fund** — savings, spending, travel freedom days
-- **Explore** — destination adventure board
-- **Profile** — solo travel stats and explorer type
+- **Home** — command center, readiness, fund, stats
+- **Journeys** — adventure chapters with prep, timeline, budget, memories
+- **Essentials** — gear (one-bag) + travel fund
+- **Explore** — visited & dreaming world map
+
+Profile opens from the avatar on Home (not a separate tab).
 
 ## Develop
 
@@ -18,10 +18,4 @@ npm install
 npm run dev
 ```
 
-## Build
-
-```bash
-npm run build
-```
-
-Data persists in `localStorage` (`waypoint-data-v1`).
+Data persists in `localStorage` (`waypoint-data-v2`).

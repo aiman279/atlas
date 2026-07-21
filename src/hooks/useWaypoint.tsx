@@ -8,35 +8,35 @@ import {
 } from 'react';
 import {
   computeReadiness,
-  currentMission,
+  currentJourney,
   loadData,
   saveData,
 } from '../data/waypoint';
 import type {
   ChecklistItem,
-  Mission,
+  Journey,
   ReadinessBreakdown,
   WaypointData,
 } from '../data/types';
 
 interface WaypointContextValue {
   data: WaypointData;
-  mission: Mission;
+  journey: Journey;
   readiness: ReadinessBreakdown;
-  toggleChecklist: (missionId: string, itemId: string) => void;
-  updateNotes: (missionId: string, notes: string) => void;
+  toggleChecklist: (journeyId: string, itemId: string) => void;
+  updateNotes: (journeyId: string, notes: string) => void;
   addExpense: (amount: number, note: string) => void;
+  addMemoryNote: (journeyId: string, text: string) => void;
 }
 
 const Ctx = createContext<WaypointContextValue | null>(null);
 
 export function WaypointProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<WaypointData>(() => loadData());
-
-  const mission = useMemo(() => currentMission(data), [data]);
+  const journey = useMemo(() => currentJourney(data), [data]);
   const readiness = useMemo(
-    () => computeReadiness(data, mission),
-    [data, mission],
+    () => computeReadiness(data, journey),
+    [data, journey],
   );
 
   const persist = useCallback((next: WaypointData) => {
@@ -45,14 +45,14 @@ export function WaypointProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggleChecklist = useCallback(
-    (missionId: string, itemId: string) => {
+    (journeyId: string, itemId: string) => {
       persist({
         ...data,
-        missions: data.missions.map((m) => {
-          if (m.id !== missionId) return m;
+        journeys: data.journeys.map((j) => {
+          if (j.id !== journeyId) return j;
           return {
-            ...m,
-            checklist: m.checklist.map((c: ChecklistItem) =>
+            ...j,
+            checklist: j.checklist.map((c: ChecklistItem) =>
               c.id === itemId ? { ...c, done: !c.done } : c,
             ),
           };
@@ -63,11 +63,11 @@ export function WaypointProvider({ children }: { children: ReactNode }) {
   );
 
   const updateNotes = useCallback(
-    (missionId: string, notes: string) => {
+    (journeyId: string, notes: string) => {
       persist({
         ...data,
-        missions: data.missions.map((m) =>
-          m.id === missionId ? { ...m, notes } : m,
+        journeys: data.journeys.map((j) =>
+          j.id === journeyId ? { ...j, notes } : j,
         ),
       });
     },
@@ -76,21 +76,52 @@ export function WaypointProvider({ children }: { children: ReactNode }) {
 
   const addExpense = useCallback(
     (amount: number, note: string) => {
-      const tx = {
-        id: `tx-${Date.now()}`,
-        type: 'expense' as const,
-        category: 'Activities' as const,
-        amount,
-        note,
-        date: new Date().toISOString().slice(0, 10),
-      };
       persist({
         ...data,
         fund: {
           ...data.fund,
           saved: Math.max(0, data.fund.saved - amount),
-          transactions: [tx, ...data.fund.transactions],
+          transactions: [
+            {
+              id: `tx-${Date.now()}`,
+              type: 'expense',
+              category: 'Activities',
+              amount,
+              note,
+              date: new Date().toISOString().slice(0, 10),
+            },
+            ...data.fund.transactions,
+          ],
         },
+      });
+    },
+    [data, persist],
+  );
+
+  const addMemoryNote = useCallback(
+    (journeyId: string, text: string) => {
+      persist({
+        ...data,
+        journeys: data.journeys.map((j) => {
+          if (j.id !== journeyId) return j;
+          const memory = j.memory ?? {
+            photos: [],
+            notes: '',
+            favouriteMoment: '',
+            reflection: '',
+            lessonsLearned: [],
+            rating: 0,
+          };
+          return {
+            ...j,
+            memory: {
+              ...memory,
+              notes: memory.notes
+                ? `${memory.notes}\n\n${text}`
+                : text,
+            },
+          };
+        }),
       });
     },
     [data, persist],
@@ -99,13 +130,22 @@ export function WaypointProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       data,
-      mission,
+      journey,
       readiness,
       toggleChecklist,
       updateNotes,
       addExpense,
+      addMemoryNote,
     }),
-    [data, mission, readiness, toggleChecklist, updateNotes, addExpense],
+    [
+      data,
+      journey,
+      readiness,
+      toggleChecklist,
+      updateNotes,
+      addExpense,
+      addMemoryNote,
+    ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -566,3 +566,276 @@
     align-items: flex-start;
   }
 }
+
+.home-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.welcome {
+  font-size: clamp(1.55rem, 5vw, 1.9rem);
+  margin: 0.15rem 0 0.35rem;
+}
+
+.home-top .brand-q {
+  margin-bottom: 1.1rem;
+}
+
+.avatar-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.fund-goal-name {
+  font-weight: 650;
+  margin-bottom: 0.2rem;
+}
+
+.fund-ratio {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.wallet-row.tight {
+  margin-bottom: 0.5rem;
+}
+
+.stats-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+
+.stat-emoji {
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  background: var(--fill);
+  border-radius: 14px;
+  margin-bottom: 1rem;
+}
+
+.seg button {
+  border: none;
+  background: transparent;
+  border-radius: 11px;
+  padding: 0.65rem 0.5rem;
+  font-weight: 650;
+  color: var(--ink-3);
+}
+
+.seg button.is-on {
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.photo-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.photo-strip img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.pull-quote {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.lesson-list li {
+  position: relative;
+  padding-left: 0.9rem;
+  color: var(--ink-2);
+  font-size: 0.92rem;
+}
+
+.lesson-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.map-stage {
+  position: relative;
+  padding: 0.4rem !important;
+  overflow: hidden;
+  background: #dfe6ef !important;
+  min-height: 260px;
+}
+
+.map-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-path {
+  fill: #b8c4d4;
+  stroke: rgba(255, 255, 255, 0.55);
+  stroke-width: 0.4;
+  transition: fill 0.2s ease;
+}
+
+.map-path--visited {
+  fill: #34c759;
+  cursor: pointer;
+}
+
+.map-path--dream {
+  fill: #86868b;
+  cursor: pointer;
+}
+
+.map-path--visited:hover,
+.map-path--dream:hover {
+  filter: brightness(1.1);
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.map-msg {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--ink-2);
+}
+
+.map-sheet {
+  position: absolute;
+  left: 0.55rem;
+  right: 0.55rem;
+  bottom: 0.55rem;
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.map-close {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  z-index: 2;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.map-close.static {
+  position: static;
+  background: var(--fill);
+  color: var(--ink);
+}
+
+.map-sheet-photo {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.map-sheet-body {
+  padding: 0.9rem 1rem 1.05rem;
+}
+
+.map-sheet-body h3 {
+  font-size: 1.2rem;
+  margin: 0.2rem 0 0.3rem;
+}
+
+.map-memory {
+  font-family: var(--display);
+  font-style: italic;
+  margin: 0.45rem 0;
+}
+
+.why.tight {
+  margin: 0.35rem 0 0.25rem;
+  font-size: 1rem;
+}
+
+.profile-modal {
+  max-height: min(88dvh, 720px);
+  overflow: auto;
+}
+
+.profile-modal-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.avatar-lg {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.modal textarea {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 500;
+  resize: vertical;
+  width: 100%;
+}
+
+@media (max-width: 400px) {
+  .stats-3 {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,12 +2,10 @@ import type { AppView } from '../data/types';
 import './BottomNav.css';
 
 const items: { view: AppView; icon: string; label: string }[] = [
-  { view: 'dashboard', icon: '🏠', label: 'Home' },
-  { view: 'missions', icon: '🧭', label: 'Missions' },
-  { view: 'gear', icon: '🎒', label: 'Gear' },
-  { view: 'fund', icon: '💰', label: 'Fund' },
+  { view: 'home', icon: '🏠', label: 'Home' },
+  { view: 'journeys', icon: '🧭', label: 'Journeys' },
+  { view: 'essentials', icon: '🎒', label: 'Essentials' },
   { view: 'explore', icon: '🌎', label: 'Explore' },
-  { view: 'profile', icon: '⚙️', label: 'Profile' },
 ];
 
 export function BottomNav({
@@ -17,7 +15,7 @@ export function BottomNav({
   current: AppView;
   onNavigate: (v: AppView) => void;
 }) {
-  const active = current === 'mission-detail' ? 'missions' : current;
+  const active = current === 'journey-detail' ? 'journeys' : current;
 
   return (
     <nav className="bottom-nav" aria-label="Main">

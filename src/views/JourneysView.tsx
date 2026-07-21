@@ -9,9 +9,9 @@ const statusTone = {
   completed: 'green' as const,
 };
 
-export function MissionsView({ onOpen }: { onOpen: (id: string) => void }) {
+export function JourneysView({ onOpen }: { onOpen: (id: string) => void }) {
   const { data } = useWaypoint();
-  const missions = [...data.missions].sort((a, b) => {
+  const journeys = [...data.journeys].sort((a, b) => {
     if (a.isCurrent) return -1;
     if (b.isCurrent) return 1;
     return b.startDate.localeCompare(a.startDate);
@@ -20,37 +20,37 @@ export function MissionsView({ onOpen }: { onOpen: (id: string) => void }) {
   return (
     <div className="view">
       <PageHeader
-        eyebrow="Trip management"
-        title="Missions"
-        subtitle="Each mission is an adventure — prepare, execute, reflect."
+        eyebrow="Travel chapters"
+        title="Journeys"
+        subtitle="Current and previous adventures — your story in chapters."
       />
       <div className="stack">
-        {missions.map((m, i) => (
+        {journeys.map((j, i) => (
           <motion.div
-            key={m.id}
+            key={j.id}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
           >
-            <Card className="mission-card" onClick={() => onOpen(m.id)}>
+            <Card className="mission-card" onClick={() => onOpen(j.id)}>
               <div
                 className="mission-cover"
-                style={{ backgroundImage: `url(${m.coverImage})` }}
+                style={{ backgroundImage: `url(${j.coverImage})` }}
               />
               <div className="mission-body">
                 <div className="mission-top">
-                  <p className="eyebrow">Mission</p>
-                  <Pill tone={statusTone[m.status]}>
-                    {m.status.charAt(0).toUpperCase() + m.status.slice(1)}
+                  <p className="eyebrow">Journey</p>
+                  <Pill tone={statusTone[j.status]}>
+                    {j.status.charAt(0).toUpperCase() + j.status.slice(1)}
                   </Pill>
                 </div>
                 <h3>
-                  {m.flag} {m.title}
+                  {j.flag} {j.title}
                 </h3>
                 <div className="meta-row">
-                  <span>{formatMonthYear(m.startDate)}</span>
-                  <span>{m.durationDays} days</span>
-                  <span>{formatMoney(m.budget)}</span>
+                  <span>{formatMonthYear(j.startDate)}</span>
+                  <span>{j.durationDays} days</span>
+                  <span>{formatMoney(j.budget)}</span>
                 </div>
               </div>
             </Card>

@@ -1,4 +1,4 @@
-export type MissionStatus = 'preparing' | 'active' | 'completed';
+export type JourneyStatus = 'preparing' | 'active' | 'completed';
 export type ChecklistGroup = 'documents' | 'transport' | 'knowledge';
 export type GearCategory =
   | 'Technology'
@@ -33,12 +33,23 @@ export interface BudgetLine {
   amount: number;
 }
 
-export interface Mission {
+export interface JourneyMemory {
+  photos: string[];
+  notes: string;
+  favouriteMoment: string;
+  reflection: string;
+  lessonsLearned: string[];
+  rating: number;
+}
+
+export interface Journey {
   id: string;
   title: string;
   flag: string;
   country: string;
-  status: MissionStatus;
+  countryCode: string;
+  city: string;
+  status: JourneyStatus;
   startDate: string;
   durationDays: number;
   budget: number;
@@ -48,6 +59,7 @@ export interface Mission {
   budgetBreakdown: BudgetLine[];
   notes: string;
   isCurrent: boolean;
+  memory?: JourneyMemory;
 }
 
 export interface GearItem {
@@ -79,11 +91,27 @@ export interface TravelFund {
   transactions: FundTransaction[];
 }
 
-export interface Destination {
+export interface VisitedPlace {
   id: string;
   country: string;
+  countryCode: string;
   flag: string;
-  why: string;
+  city: string;
+  visitedAt: string;
+  days: number;
+  memory: string;
+  lesson?: string;
+  photos: string[];
+  rating: number;
+  journeyId?: string;
+}
+
+export interface DreamPlace {
+  id: string;
+  country: string;
+  countryCode: string;
+  flag: string;
+  dream: string;
   estimatedBudget: number;
   targetYear: number;
   priority: Priority;
@@ -96,8 +124,8 @@ export interface SoloProfile {
   favouriteStyle: string;
   travelPersonality: string;
   countriesVisited: number;
+  totalJourneys: number;
   totalTravelDays: number;
-  totalAdventures: number;
   bio: string;
 }
 
@@ -107,21 +135,20 @@ export interface GearLimits {
 
 export interface WaypointData {
   profile: SoloProfile;
-  missions: Mission[];
+  journeys: Journey[];
   gear: GearItem[];
   gearLimits: GearLimits;
   fund: TravelFund;
-  destinations: Destination[];
+  visited: VisitedPlace[];
+  dreaming: DreamPlace[];
 }
 
 export type AppView =
-  | 'dashboard'
-  | 'missions'
-  | 'mission-detail'
-  | 'gear'
-  | 'fund'
-  | 'explore'
-  | 'profile';
+  | 'home'
+  | 'journeys'
+  | 'journey-detail'
+  | 'essentials'
+  | 'explore';
 
 export interface ReadinessBreakdown {
   overall: number;
