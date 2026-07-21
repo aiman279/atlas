@@ -1,62 +1,45 @@
 import { motion } from 'framer-motion';
-import { formatMoney, formatMonthYear } from '../data/waypoint';
+import { journeysByYear } from '../data/waypoint';
 import { useWaypoint } from '../hooks/useWaypoint';
-import { Card, PageHeader, Pill } from '../components/ui';
-
-const statusTone = {
-  preparing: 'amber' as const,
-  active: 'blue' as const,
-  completed: 'green' as const,
-};
 
 export function JourneysView({ onOpen }: { onOpen: (id: string) => void }) {
-  const { data } = useWaypoint();
-  const journeys = [...data.journeys].sort((a, b) => {
-    if (a.isCurrent) return -1;
-    if (b.isCurrent) return 1;
-    return b.startDate.localeCompare(a.startDate);
-  });
+  const data = useWaypoint();
+  const years = journeysByYear(data);
 
   return (
-    <div className="view">
-      <PageHeader
-        eyebrow="Travel chapters"
-        title="Journeys"
-        subtitle="Current and previous adventures — your story in chapters."
-      />
-      <div className="stack">
-        {journeys.map((j, i) => (
-          <motion.div
-            key={j.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.04 }}
-          >
-            <Card className="mission-card" onClick={() => onOpen(j.id)}>
-              <div
-                className="mission-cover"
-                style={{ backgroundImage: `url(${j.coverImage})` }}
-              />
-              <div className="mission-body">
-                <div className="mission-top">
-                  <p className="eyebrow">Journey</p>
-                  <Pill tone={statusTone[j.status]}>
-                    {j.status.charAt(0).toUpperCase() + j.status.slice(1)}
-                  </Pill>
-                </div>
-                <h3>
-                  {j.flag} {j.title}
-                </h3>
-                <div className="meta-row">
-                  <span>{formatMonthYear(j.startDate)}</span>
-                  <span>{j.durationDays} days</span>
-                  <span>{formatMoney(j.budget)}</span>
-                </div>
+    <motion.div
+      className="page"
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <h1 className="page-title">Journeys</h1>
+      <p className="page-lead">Adventures as chapters.</p>
+
+      <div className="timeline">
+        {years.map(([year, list]) => (
+          <section key={year} className="year-block">
+            <h2 className="year">{year}</h2>
+            {list.map((j, i) => (
+              <div key={j.id}>
+                <button
+                  type="button"
+                  className="timeline-item"
+                  onClick={() => onOpen(j.id)}
+                >
+                  <h3>
+                    {j.flag} {j.country}
+                  </h3>
+                  <p className="block-meta">
+                    {j.cities.join(' · ')}
+                  </p>
+                  <p className="block-meta">{j.durationDays} days</p>
+                </button>
+                {i < list.length - 1 && <hr className="rule soft" />}
               </div>
-            </Card>
-          </motion.div>
+            ))}
+          </section>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

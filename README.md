@@ -1,15 +1,13 @@
 # Waypoint
 
-A personal operating system for solo travelers — prepare, manage, and build your travel story.
+A personal travel archive — a quiet digital passport for places, memories, and dreams.
 
-## Navigation
+## Sections
 
-- **Home** — command center, readiness, fund, stats
-- **Journeys** — adventure chapters with prep, timeline, budget, memories
-- **Essentials** — gear (one-bag) + travel fund
-- **Explore** — visited & dreaming world map
-
-Profile opens from the avatar on Home (not a separate tab).
+- **Home** — calm overview
+- **Journeys** — adventure chapters as a timeline
+- **World** — visited & dream map with memory pages
+- **Profile** — simple explorer identity
 
 ## Develop
 
@@ -18,4 +16,4 @@ npm install
 npm run dev
 ```
 
-Data persists in `localStorage` (`waypoint-data-v2`).
+Data: `localStorage` key `waypoint-archive-v1`.
